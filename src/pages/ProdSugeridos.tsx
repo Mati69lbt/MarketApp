@@ -84,26 +84,22 @@ const ProdSugeridos = () => {
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "sugeridos"), (snapshot) => {
-      const seleccionadosMap = new Map<string, boolean>();
+      const productosFirestore: ProductoMarcado[] = [];
 
       snapshot.forEach((doc) => {
         const data = doc.data();
-        if (data && typeof data.seleccionado === "boolean") {
-          seleccionadosMap.set(data.nombre, data.seleccionado);
+        if (data && data.nombre && data.categoria) {
+          productosFirestore.push(data as ProductoMarcado);
         }
       });
 
-      setProductos(
-        productosData.map((p) => ({
-          ...p,
-          seleccionado: seleccionadosMap.get(p.nombre) || false,
-        }))
-      );
+      setProductos(productosFirestore);
       setCuentaRegresiva(30);
     });
 
     return () => unsub();
   }, []);
+
 
   const productosPorCategoria = productos.reduce((acc, prod) => {
     if (!acc[prod.categoria]) acc[prod.categoria] = [];

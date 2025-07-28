@@ -17,33 +17,40 @@ const ListaCompras = () => {
 
   useEffect(() => {
     if (cuentaRegresiva === null) return;
-    if (cuentaRegresiva === 0) {
-      setTimeout(() => setCuentaRegresiva(null), 1000);
-      return;
-    }
 
     const timer = setTimeout(() => {
-      setCuentaRegresiva((prev) => (prev ?? 0) - 1);
+      setCuentaRegresiva((prev) => {
+        if (prev === 1) return null;
+        return (prev ?? 0) - 1;
+      });
     }, 1000);
 
     return () => clearTimeout(timer);
   }, [cuentaRegresiva]);
 
-  useEffect(() => {
-    const unsub = onSnapshot(collection(db, "sugeridos"), (snapshot) => {
-      const productos: Producto[] = [];
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.seleccionado) {
-          productos.push(data as Producto);
-        }
-      });
-      setSeleccionados(productos);
-      setCuentaRegresiva(30);
-    });
+ useEffect(() => {
+   const unsub = onSnapshot(collection(db, "sugeridos"), (snapshot) => {
+     const productos: Producto[] = [];
 
-    return () => unsub(); // Limpieza al desmontar
-  }, []);
+     snapshot.forEach((doc) => {
+       const data = doc.data();
+       if (
+         data &&
+         data.seleccionado === true &&
+         typeof data.nombre === "string" &&
+         typeof data.categoria === "string"
+       ) {
+         productos.push(data as Producto);
+       }
+     });
+
+     setSeleccionados(productos);
+     setCuentaRegresiva(30);
+   });
+
+   return () => unsub(); // Limpieza
+ }, []);
+
 
  const borrarProducto = async (nombre: string) => {
    // Optimismo: lo sacamos del estado primero
