@@ -80,25 +80,29 @@ const ListaCompras = () => {
         </div>
       )}
       <h1>Lista de Compras</h1>
-      {ordenDeseado.map((categoria) => {
-        const items = productosPorCategoria[categoria];
-        if (!items) return null;
-        return (
-          <div key={categoria}>
-            <h2>{categoria}</h2>
-            <ul>
-              {items.map((prod) => (
-                <li
-                  key={prod.nombre}
-                  onClick={() => borrarProducto(prod.nombre)}
-                >
-                  {prod.nombre}
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-      })}
+      {seleccionados.length === 0 ? (
+        <span className="sin-productos">No hay productos seleccionados</span>
+      ) : (
+        ordenDeseado.map((categoria) => {
+          const items = productosPorCategoria[categoria];
+          if (!items) return null;
+          return (
+            <div key={categoria}>
+              <h2>{categoria}</h2>
+              <ul>
+                {items.map((prod) => (
+                  <li
+                    key={prod.nombre}
+                    onClick={() => borrarProducto(prod.nombre)}
+                  >
+                    {prod.nombre}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 };

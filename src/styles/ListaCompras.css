@@ -26,7 +26,13 @@
 .lista-compras li:hover {
   background-color: #e8f5e9;
 }
-
+.sin-productos {
+  display: block;
+  margin-top: 1rem;
+  font-style: italic;
+  color: #999;
+  text-align: center;
+}
 @media (max-width: 768px) {
   .lista-compras li {
     font-size: 2em; /* tamaño de fuente más pequeño en pantallas chicas */
