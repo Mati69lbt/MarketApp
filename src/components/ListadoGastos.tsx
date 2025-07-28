@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { Gasto as GastoType } from "../types/Gasto"; 
-import Gasto from "./Gasto"; 
+import type { Gasto as GastoType } from "../types/Gasto";
 import "../styles/ListadoGastos.css";
+import Pago from "./Pago";
 
 interface Props {
   gastos: GastoType[];
@@ -21,7 +21,7 @@ const ListadoGastos = ({ gastos, setGastoEditar, eliminarGasto }: Props) => {
     <div className="listado-gastos contenedor">
       <h2>{gastosOrdenados.length ? "Gastos" : "No Hay Gastos, No Hay"}</h2>
       {gastosOrdenados.map((gasto) => (
-        <Gasto
+        <Pago
           key={gasto.id}
           gasto={gasto}
           setGastoEditar={setGastoEditar}
