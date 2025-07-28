@@ -1,0 +1,120 @@
+.prod-sugeridos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.prod-sugeridos > div {
+  flex: 1 1 280px;
+  max-width: 320px;
+  background-color: #fdfdfd;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.prod-sugeridos h2 {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 2.5remrem;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+.prod-sugeridos ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.prod-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  background-color: #f4f4f4;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.prod-item:hover {
+  background-color: #e9f5e9;
+}
+
+.prod-item input {
+  margin-right: 0.75rem;
+}
+
+.contador {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 2rem 0;
+  color: #444;
+}
+
+.agregar-producto {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.agregar-producto input,
+.agregar-producto select {
+  padding: 0.5rem;
+  font-size: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.agregar-producto button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.agregar-producto button:hover {
+  background-color: #3c8f44;
+}
+
+/* Responsive: 1 columna en pantallas chicas */
+@media (max-width: 768px) {
+  .agregar-producto {
+    flex-direction: row;
+    align-items: right;
+    justify-content: left;
+    font-size: 3rem;
+  }
+  .agregar-producto input,
+  .agregar-producto select {
+    font-size: 2.5rem;
+    width: 100%;
+  }
+  .prod-sugeridos > div {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .prod-sugeridos h2 {
+    font-size: 5rem;
+    text-align: center;
+    margin-top: 0;
+  }
+  .prod-sugeridos ul {
+    font-size: 3rem;
+  }
+  .prod-item {
+    margin-bottom: 2rem;
+  }
+}

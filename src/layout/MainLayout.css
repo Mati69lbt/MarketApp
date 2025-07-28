@@ -1,0 +1,70 @@
+/* MainLayout.css */
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  padding: 1rem 2rem;
+  gap: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.navbar a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #333;
+  transition: color 0.3s, background-color 0.3s;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.navbar a:hover {
+  background-color: #f0f0f0;
+  color: #007bff;
+}
+
+main {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+.logOut{
+  background-color: #15ff00ff;
+}
+.logIn{
+  background-color: #ff0000ff;
+}
+
+/* Responsive behavior */
+@media (max-width: 600px) {
+  .navbar {
+    justify-content: flex-start;
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .navbar a {
+    font-size: 3rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .navbar .grupo-1 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .navbar .grupo-2 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+}

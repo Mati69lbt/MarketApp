@@ -1,0 +1,143 @@
+.contenedor {
+  width: 90%;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+.contenedor-presupuesto {
+  margin-top: -5rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  transform: translateY(5rem);
+}
+.dos-columnas {
+  flex-direction: column;
+}
+.dos-columnas :first-child {
+  margin-bottom: 4rem;
+}
+@media (min-width: 768px) {
+  .dos-columnas {
+    flex-direction: row;
+    align-items: center;
+    gap: 4rem;
+  }
+  .dos-columnas > div {
+    width: 50%;
+  }
+  .dos-columnas :first-child {
+    margin-bottom: 0;
+  }
+}
+
+.contenedor-presupuesto svg {
+  width: 25rem;
+}
+
+.contenido-presupuesto {
+  width: 100%;
+}
+.contenido-presupuesto p {
+  font-weight: 400;
+  color: var(--gris-oscuro);
+  font-size: 2.4rem;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .contenido-presupuesto p {
+    text-align: left;
+  }
+}
+.contenido-presupuesto p.negativo,
+.contenido-presupuesto p.negativo span {
+  color: red;
+}
+.contenido-presupuesto span {
+  font-weight: 900;
+  color: var(--azul);
+}
+.reset-app {
+  border: none;
+  background-color: #db2777;
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
+  color: var(--blanco);
+  text-transform: uppercase;
+  font-weight: 900;
+  border-radius: 1rem;
+  transition-property: background-color;
+  transition-duration: 300ms;
+}
+.reset-app:hover {
+  background-color: #c71465;
+  cursor: pointer;
+}
+
+.reset-app-listado {
+  border: none;
+  background-color: rgb(39, 96, 219);
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
+  color: var(--blanco);
+  text-transform: uppercase;
+  font-weight: 900;
+  border-radius: 1rem;
+  transition-property: background-color;
+  transition-duration: 300ms;
+}
+.reset-app-listado:hover {
+  background-color: rgb(83, 127, 223);
+  cursor: pointer;
+}
+
+.reset-app-exportar {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.circular-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #3b82f6; /* valor por defecto, se puede sobrescribir inline si es dinámico */
+  margin-top: 14rem;
+  margin-left: -8rem;
+  font-size: 3rem;
+  text-align: center;
+}
+
+.circular-text strong {
+  font-size: 3rem;
+}
+
+.rojo {
+  color: #dc2626;
+}
+
+.azul {
+  color: #3b82f6;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+  .circular-text {
+    font-size: 3rem;
+    margin-top: -14rem;
+    margin-left: 2rem;
+  }
+
+  .circular-text div {
+    font-size: 3rem;
+    margin-top: -4rem;
+  }
+}

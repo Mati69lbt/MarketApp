@@ -1,0 +1,105 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.92);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  z-index: 1000;
+}
+
+.modal .cerrar-modal {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  z-index: 1001;
+}
+
+.modal .cerrar-modal img {
+  width: 100%;
+  cursor: pointer;
+}
+
+.modal .formulario {
+  background-color: #1e1e1e;
+  color: var(--blanco);
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+}
+
+.modal .formulario.animar {
+  opacity: 1;
+}
+
+.modal .formulario.cerrar {
+  opacity: 0;
+}
+
+.modal label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  text-align: left;
+  color: var(--blanco);
+}
+
+.modal input[type="text"],
+.modal input[type="submit"] {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.modal input[type="submit"] {
+  background-color: #3b82f6;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal input[type="submit"]:hover {
+  background-color: #2563eb;
+}
+
+.modal button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.modal button:hover {
+  background-color: white;
+  color: black;
+}
+
+@media (max-width: 600px) {
+  .modal .formulario {
+    padding: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .modal .cerrar-modal {
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+  }
+}
