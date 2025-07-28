@@ -54,9 +54,7 @@ const ListaCompras = () => {
      toast.success(`"${nombre}" eliminado de la lista`);
    } catch (error) {
      toast.error("No se pudo eliminar el producto");
-     console.error("Error al borrar producto:", error);
-     // Revertir si falló
-     setSeleccionados((prev) => [...prev, { nombre, seleccionado: true }]); // opcional
+     console.error("Error al borrar producto:", error);    
    }
  };
 
