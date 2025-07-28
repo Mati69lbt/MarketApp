@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import productosData from "../helpers/prodSug.json";
 import "../styles/ProdSugeridos.css";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../helpers/firebase";
 import { toast } from "react-toastify";
 
@@ -83,31 +83,26 @@ const ProdSugeridos = () => {
   };
 
   useEffect(() => {
-    const cargarDatosYContador = async () => {
-      try {
-        const snapshot = await getDocs(collection(db, "sugeridos"));
-        const seleccionadosMap = new Map<string, boolean>();
+    const unsub = onSnapshot(collection(db, "sugeridos"), (snapshot) => {
+      const seleccionadosMap = new Map<string, boolean>();
 
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data && typeof data.seleccionado === "boolean") {
-            seleccionadosMap.set(data.nombre, data.seleccionado);
-          }
-        });
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data && typeof data.seleccionado === "boolean") {
+          seleccionadosMap.set(data.nombre, data.seleccionado);
+        }
+      });
 
-        setProductos(
-          productosData.map((p) => ({
-            ...p,
-            seleccionado: seleccionadosMap.get(p.nombre) || false,
-          }))
-        );
-        setCuentaRegresiva(30);
-      } catch (error) {
-        toast.error("Error al leer productos desde Firestore");
-      }
-    };
+      setProductos(
+        productosData.map((p) => ({
+          ...p,
+          seleccionado: seleccionadosMap.get(p.nombre) || false,
+        }))
+      );
+      setCuentaRegresiva(30);
+    });
 
-    cargarDatosYContador();
+    return () => unsub();
   }, []);
 
   const productosPorCategoria = productos.reduce((acc, prod) => {
@@ -116,30 +111,32 @@ const ProdSugeridos = () => {
     return acc;
   }, {} as Record<string, ProductoMarcado[]>);
 
-  const toggleSeleccionado = async (nombre: string) => {
-    setProductos((prev) =>
-      prev.map((prod) =>
-        prod.nombre === nombre
-          ? { ...prod, seleccionado: !prod.seleccionado }
-          : prod
-      )
-    );
+const toggleSeleccionado = async (nombre: string) => {
+  let nuevoEstado = false;
 
-    try {
-      const producto = productos.find((p) => p.nombre === nombre);
-      if (!producto) return;
+  setProductos((prev) => {
+    const actualizados = prev.map((prod) => {
+      if (prod.nombre === nombre) {
+        nuevoEstado = !prod.seleccionado;
+        return { ...prod, seleccionado: nuevoEstado };
+      }
+      return prod;
+    });
+    return actualizados;
+  });
 
-      const actualizado = { ...producto, seleccionado: !producto.seleccionado };
+  try {
+    await updateDoc(doc(db, "sugeridos", nombre), {
+      seleccionado: nuevoEstado,
+    });
 
-      await setDoc(doc(db, "sugeridos", actualizado.nombre), actualizado);
-      toast.info(
-        `Producto ${actualizado.seleccionado ? "Seleccionado" : "Desactivado "}`
-      );
-    } catch (error) {
-      toast.error("No se pudo guardar el cambio");
-      console.error("Error al guardar en Firebase:", error);
-    }
-  };
+    toast.info(`Producto ${nuevoEstado ? "Seleccionado" : "Desactivado"}`);
+  } catch (error) {
+    toast.error("No se pudo guardar el cambio");
+    console.error("Error al guardar en Firebase:", error);
+  }
+};
+
 
   return (
     <div>

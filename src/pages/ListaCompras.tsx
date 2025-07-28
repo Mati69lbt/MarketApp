@@ -1,6 +1,6 @@
 // cspell: ignore categoria firestore
 import { useEffect, useState } from "react";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../helpers/firebase";
 import "../styles/ListaCompras.css";
 import { toast } from "react-toastify";
@@ -30,36 +30,35 @@ const ListaCompras = () => {
   }, [cuentaRegresiva]);
 
   useEffect(() => {
-    const obtenerProductosSeleccionados = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "sugeridos"));
-        const productos: Producto[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.seleccionado) {
-            productos.push(data as Producto);
-          }
-        });
-        setSeleccionados(productos);
-      } catch (error) {
-        toast.error("Error al cargar la lista");
-        console.error("Error al obtener productos:", error);
-      }
-    };
-    setCuentaRegresiva(30);
-    obtenerProductosSeleccionados();
+    const unsub = onSnapshot(collection(db, "sugeridos"), (snapshot) => {
+      const productos: Producto[] = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.seleccionado) {
+          productos.push(data as Producto);
+        }
+      });
+      setSeleccionados(productos);
+      setCuentaRegresiva(30);
+    });
+
+    return () => unsub(); // Limpieza al desmontar
   }, []);
 
-  const borrarProducto = async (nombre: string) => {
-    try {
-      await deleteDoc(doc(db, "sugeridos", nombre));
-      setSeleccionados((prev) => prev.filter((p) => p.nombre !== nombre));
-      toast.success(`"${nombre}" eliminado de la lista`);
-    } catch (error) {
-      toast.error("No se pudo eliminar el producto");
-      console.error("Error al borrar producto:", error);
-    }
-  };
+ const borrarProducto = async (nombre: string) => {
+   // Optimismo: lo sacamos del estado primero
+   setSeleccionados((prev) => prev.filter((p) => p.nombre !== nombre));
+
+   try {
+     await deleteDoc(doc(db, "sugeridos", nombre));
+     toast.success(`"${nombre}" eliminado de la lista`);
+   } catch (error) {
+     toast.error("No se pudo eliminar el producto");
+     console.error("Error al borrar producto:", error);
+     // Revertir si falló
+     setSeleccionados((prev) => [...prev, { nombre, seleccionado: true }]); // opcional
+   }
+ };
 
   const productosPorCategoria = seleccionados.reduce((acc, prod) => {
     if (!acc[prod.categoria]) acc[prod.categoria] = [];
