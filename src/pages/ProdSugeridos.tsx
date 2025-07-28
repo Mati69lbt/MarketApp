@@ -101,7 +101,7 @@ const ProdSugeridos = () => {
             seleccionado: seleccionadosMap.get(p.nombre) || false,
           }))
         );
-        setCuentaRegresiva(0);
+        setCuentaRegresiva(30);
       } catch (error) {
         toast.error("Error al leer productos desde Firestore");
       }

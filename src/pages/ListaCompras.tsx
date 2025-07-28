@@ -13,6 +13,21 @@ interface Producto {
 
 const ListaCompras = () => {
   const [seleccionados, setSeleccionados] = useState<Producto[]>([]);
+  const [cuentaRegresiva, setCuentaRegresiva] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (cuentaRegresiva === null) return;
+    if (cuentaRegresiva === 0) {
+      setTimeout(() => setCuentaRegresiva(null), 1000);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setCuentaRegresiva((prev) => (prev ?? 0) - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [cuentaRegresiva]);
 
   useEffect(() => {
     const obtenerProductosSeleccionados = async () => {
@@ -31,7 +46,7 @@ const ListaCompras = () => {
         console.error("Error al obtener productos:", error);
       }
     };
-
+    setCuentaRegresiva(30);
     obtenerProductosSeleccionados();
   }, []);
 
@@ -62,6 +77,11 @@ const ListaCompras = () => {
 
   return (
     <div className="lista-compras">
+      {cuentaRegresiva !== null && (
+        <div className="contador">
+          <h3>{cuentaRegresiva === 0 ? "¡Listo!" : cuentaRegresiva}</h3>
+        </div>
+      )}
       <h1>Lista de Compras</h1>
       {ordenDeseado.map((categoria) => {
         const items = productosPorCategoria[categoria];
