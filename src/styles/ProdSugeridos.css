@@ -48,58 +48,65 @@
   margin-right: 0.75rem;
 }
 
-.contador {
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin: 2rem 0;
-  color: #444;
-}
-
 .agregar-producto {
   display: flex;
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* 👈 Evita que se vaya a varias líneas */
 }
 
 .agregar-producto input,
 .agregar-producto select {
-  padding: 0.5rem;
-  font-size: 2rem;
+  padding: 0.4rem;
+  font-size: 1.6rem;
   border: 1px solid #ccc;
   border-radius: 6px;
+  width: auto;
+  max-width: 400px; /* 👈 Limita el ancho del input/select */
+  min-width: 120px;
+}
+
+.agregar-producto input {
+  flex-shrink: 1;
 }
 
 .agregar-producto button {
   background-color: #4caf50;
   color: white;
   border: none;
-  padding: 0.5rem 1.25rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 6px;
   font-weight: bold;
   transition: background-color 0.3s;
+  white-space: nowrap;
 }
 
 .agregar-producto button:hover {
   background-color: #3c8f44;
 }
 
+
+.MarcarProductos {
+  margin-top: 1rem;
+  text-align: center;
+}
+
 /* Responsive: 1 columna en pantallas chicas */
 @media (max-width: 768px) {
-  .agregar-producto {
-    flex-direction: row;
-    align-items: right;
-    justify-content: left;
-    font-size: 3rem;
+ .agregar-producto {
+    flex-direction: column;
+    align-items: stretch;
   }
+
   .agregar-producto input,
-  .agregar-producto select {
-    font-size: 2.5rem;
+  .agregar-producto select,
+  .agregar-producto button {
     width: 100%;
+    max-width: none;
+    font-size: 2.5rem;
   }
   .prod-sugeridos > div {
     flex: 1 1 100%;

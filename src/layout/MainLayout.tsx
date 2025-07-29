@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import "./MainLayout.css";
 import { auth } from "../helpers/firebase";
 import { toast } from "react-toastify";
+import { NavLink } from "react-router-dom";
 
 const MainLayout = () => {
   const [usuario, setUsuario] = useState<User | null>(null);
@@ -46,18 +47,43 @@ const MainLayout = () => {
     <div>
       <nav className="navbar">
         <div className="grupo-1">
-          <Link to="/">Inicio</Link>
-          <Link to="/comparacion">Comparación</Link>
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? "activo" : "")}
+          >
+            Inicio
+          </NavLink>
+          <NavLink
+            to="/comparacion"
+            className={({ isActive }) => (isActive ? "activo" : "")}
+          >
+            Comparación
+          </NavLink>
         </div>
         <div className="grupo-2">
-          <Link to="/productos">Sugeridos</Link>
-          <Link to="/compras">Compras</Link>
-          {usuario ? (
-            <button className="logOut" onClick={handleLogout}>Log Out</button>
-          ) : (
-            <button className="logIn" onClick={handleLogin}>Log In</button>
-          )}
+          <NavLink
+            to="/productos"
+            className={({ isActive }) => (isActive ? "activo" : "")}
+          >
+            Sugeridos
+          </NavLink>
+          <NavLink
+            to="/compras"
+            className={({ isActive }) => (isActive ? "activo" : "")}
+          >
+            Compras
+          </NavLink>
         </div>
+
+        {usuario ? (
+          <button className="logOut" onClick={handleLogout}>
+            Log Out
+          </button>
+        ) : (
+          <button className="logIn" onClick={handleLogin}>
+            Log In
+          </button>
+        )}
       </nav>
 
       <main>

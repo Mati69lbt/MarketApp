@@ -1,6 +1,6 @@
 // cspell: ignore categoria firestore
 import { useEffect, useState } from "react";
-import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../helpers/firebase";
 import "../styles/ListaCompras.css";
 import { toast } from "react-toastify";
@@ -11,107 +11,110 @@ interface Producto {
   seleccionado: boolean;
 }
 
+ const ordenDeseado = [
+   "Almacen",
+   "Limpieza",
+   "Cuidado Personal",
+   "Carniceria",
+   "Condimentos",
+ ];
+
 const ListaCompras = () => {
   const [seleccionados, setSeleccionados] = useState<Producto[]>([]);
-  const [cuentaRegresiva, setCuentaRegresiva] = useState<number | null>(null);
+ const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    if (cuentaRegresiva === null) return;
+   const obtenerProductos = async () => {
+     setLoading(true);
+     try {
+       const snapshot = await getDocs(collection(db, "sugeridos"));
+       const productos: Producto[] = [];
 
-    const timer = setTimeout(() => {
-      setCuentaRegresiva((prev) => {
-        if (prev === 1) return null;
-        return (prev ?? 0) - 1;
-      });
-    }, 1000);
+       snapshot.forEach((doc) => {
+         const data = doc.data();
+         if (
+           data &&
+           data.seleccionado === true &&
+           typeof data.nombre === "string" &&
+           typeof data.categoria === "string"
+         ) {
+           productos.push(data as Producto);
+         }
+       });
 
-    return () => clearTimeout(timer);
-  }, [cuentaRegresiva]);
+       setSeleccionados(productos);
+     } catch (error) {
+       toast.error("Error al cargar productos");
+       console.error("Error al obtener productos:", error);
+     } finally {
+       setLoading(false);
+     }
+   };
 
- useEffect(() => {
-   const unsub = onSnapshot(collection(db, "sugeridos"), (snapshot) => {
-     const productos: Producto[] = [];
+   useEffect(() => {
+     obtenerProductos();
+   }, []);
 
-     snapshot.forEach((doc) => {
-       const data = doc.data();
-       if (
-         data &&
-         data.seleccionado === true &&
-         typeof data.nombre === "string" &&
-         typeof data.categoria === "string"
-       ) {
-         productos.push(data as Producto);
-       }
-     });
+   const borrarProducto = async (nombre: string) => {
+     const confirmar = window.confirm(`¿Ya compraste "${nombre}"?`);
+     if (!confirmar) return;
 
-     setSeleccionados(productos);
-     setCuentaRegresiva(30);
-   });
+     setLoading(true);
+     try {
+       await deleteDoc(doc(db, "sugeridos", nombre));
+       setSeleccionados((prev) => prev.filter((p) => p.nombre !== nombre));
+       toast.success(`"${nombre}" eliminado de la lista`);
+     } catch (error) {
+       toast.error("No se pudo eliminar el producto");
+       console.error("Error al borrar producto:", error);
+     } finally {
+       setLoading(false);
+     }
+   };
 
-   return () => unsub(); // Limpieza
- }, []);
+   const productosPorCategoria = seleccionados.reduce((acc, prod) => {
+     if (!acc[prod.categoria]) acc[prod.categoria] = [];
+     acc[prod.categoria].push(prod);
+     return acc;
+   }, {} as Record<string, Producto[]>);
 
+ 
 
- const borrarProducto = async (nombre: string) => {
-   // Optimismo: lo sacamos del estado primero
-   setSeleccionados((prev) => prev.filter((p) => p.nombre !== nombre));
-
-   try {
-     await deleteDoc(doc(db, "sugeridos", nombre));
-     toast.success(`"${nombre}" eliminado de la lista`);
-   } catch (error) {
-     toast.error("No se pudo eliminar el producto");
-     console.error("Error al borrar producto:", error);    
-   }
- };
-
-  const productosPorCategoria = seleccionados.reduce((acc, prod) => {
-    if (!acc[prod.categoria]) acc[prod.categoria] = [];
-    acc[prod.categoria].push(prod);
-    return acc;
-  }, {} as Record<string, Producto[]>);
-
-  const ordenDeseado = [
-    "Almacen",
-    "Limpieza",
-    "Cuidado Personal",
-    "Carniceria",
-    "Condimentos",
-  ];
-
-  return (
-    <div className="lista-compras">
-      {cuentaRegresiva !== null && (
-        <div className="contador">
-          <h3>{cuentaRegresiva === 0 ? "¡Listo!" : cuentaRegresiva}</h3>
-        </div>
-      )}
-      <h1>Lista de Compras</h1>
-      {seleccionados.length === 0 ? (
-        <span className="sin-productos">No hay productos seleccionados</span>
-      ) : (
-        ordenDeseado.map((categoria) => {
-          const items = productosPorCategoria[categoria];
-          if (!items) return null;
-          return (
-            <div key={categoria}>
-              <h2>{categoria}</h2>
-              <ul>
-                {items.map((prod) => (
-                  <li
-                    key={prod.nombre}
-                    onClick={() => borrarProducto(prod.nombre)}
-                  >
-                    {prod.nombre}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })
-      )}
-    </div>
-  );
+    return (
+      <div className="lista-compras">
+        {loading ? (
+          <div className="cargando">Cargando...</div>
+        ) : (
+          <>
+            <h1>Lista de Compras</h1>
+            {seleccionados.length === 0 ? (
+              <span className="sin-productos">
+                No hay productos seleccionados
+              </span>
+            ) : (
+              ordenDeseado.map((categoria) => {
+                const items = productosPorCategoria[categoria];
+                if (!items) return null;
+                return (
+                  <div key={categoria}>
+                    <h2>{categoria}</h2>
+                    <ul>
+                      {items.map((prod) => (
+                        <li
+                          key={prod.nombre}
+                          onClick={() => borrarProducto(prod.nombre)}
+                        >
+                          {prod.nombre}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })
+            )}
+          </>
+        )}
+      </div>
+    );
 };
 
 export default ListaCompras;

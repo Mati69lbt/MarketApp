@@ -6,6 +6,7 @@ import "../styles/ProdSugeridos.css";
 import {
   collection,
   deleteDoc,
+  getDocs,
   doc,
   onSnapshot,
   setDoc,
@@ -35,81 +36,110 @@ const ProdSugeridos = () => {
   const [productos, setProductos] = useState<ProductoMarcado[]>(
     productosData.map((p) => ({ ...p, seleccionado: false }))
   );
-  const [cuentaRegresiva, setCuentaRegresiva] = useState<number | null>(null);
+
   const [nuevoNombre, setNuevoNombre] = useState("");
   const [nuevaCategoria, setNuevaCategoria] = useState(ordenDeseado[0]);
 
+  const [cargando, setCargando] = useState(true);
+
   useEffect(() => {
-    if (cuentaRegresiva === null) return;
-    if (cuentaRegresiva === 0) {
-      setTimeout(() => setCuentaRegresiva(null), 1000);
-      return;
-    }
+    const cargarSeleccionados = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "sugeridos"));
+        const productosSeleccionados: Record<string, boolean> = {};
 
-    const timer = setTimeout(() => {
-      setCuentaRegresiva((prev) => (prev ?? 0) - 1);
-    }, 1000);
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data?.nombre && data.seleccionado) {
+            productosSeleccionados[data.nombre] = true;
+          }
+        });
 
-    return () => clearTimeout(timer);
-  }, [cuentaRegresiva]);
+        // Combinamos con productosData
+        const productosCombinados: ProductoMarcado[] = productosData.map(
+          (p) => ({
+            ...p,
+            seleccionado: !!productosSeleccionados[p.nombre],
+          })
+        );
 
-  const agregarProducto = async () => {
-    const nombreTrimmed = nuevoNombre.trim();
-
-    if (!nombreTrimmed) {
-      toast.warn("El nombre está vacío. No se agrega.");
-      return;
-    }
-
-    if (
-      productos.some(
-        (p) => p.nombre.toLowerCase() === nombreTrimmed.toLowerCase()
-      )
-    ) {
-      toast.error("Ese producto ya está en la lista");
-      return;
-    }
-
-    const nuevo = {
-      nombre: nombreTrimmed,
-      categoria: nuevaCategoria,
-      seleccionado: true,
+        setProductos(productosCombinados);
+      } catch (error) {
+        toast.error("Error al cargar productos seleccionados");
+        console.error("Error al cargar productos:", error);
+      } finally {
+        setCargando(false);
+      }
     };
 
-    try {
-      await setDoc(doc(db, "sugeridos", nuevo.nombre), nuevo);
+    cargarSeleccionados();
+  }, []);
 
-      setProductos((prev) => [...prev, nuevo]);
-      setNuevoNombre("");
-      setNuevaCategoria(ordenDeseado[0]);
-      toast.success("Producto agregado correctamente");
+  const toggleSeleccionado = (nombre: string) => {
+    setProductos((prev) =>
+      prev.map((prod) =>
+        prod.nombre === nombre
+          ? { ...prod, seleccionado: !prod.seleccionado }
+          : prod
+      )
+    );
+  };
+
+  const guardarSeleccionados = async () => {
+    const seleccionados = productos.filter((p) => p.seleccionado);
+
+    if (seleccionados.length === 0) {
+      toast.warn("No hay productos seleccionados para guardar.");
+      return;
+    }
+
+    try {
+      for (const prod of seleccionados) {
+        await setDoc(doc(db, "sugeridos", prod.nombre), {
+          nombre: prod.nombre,
+          categoria: prod.categoria,
+          seleccionado: true,
+        });
+      }
+      toast.success("Productos guardados en Firebase.");
     } catch (error) {
-      toast.error("Error al agregar producto");
-      console.error("Error al agregar producto:", error);
+      toast.error("Error al guardar productos.");
+      console.error("Error guardarSeleccionados:", error);
     }
   };
 
-  useEffect(() => {
-    const unsub = onSnapshot(collection(db, "sugeridos"), (snapshot) => {
-      const productosFirestore: Record<string, boolean> = {};
+ const agregarProducto = async () => {
+   const nombreTrimmed = nuevoNombre.trim();
 
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data?.nombre && data.seleccionado) {
-          productosFirestore[data.nombre] = true;
-        }
-      });
-      const productosCombinados: ProductoMarcado[] = productosData.map((p) => ({
-        ...p,
-        seleccionado: !!productosFirestore[p.nombre],
-      }));
+   if (!nombreTrimmed) {
+     toast.warn("El nombre está vacío. No se agrega.");
+     return;
+   }
 
-      setProductos(productosCombinados);
-      setCuentaRegresiva(10);
-    });
+   const yaExiste = productos.some(
+     (p) => p.nombre.toLowerCase() === nombreTrimmed.toLowerCase()
+   );
 
-    return () => unsub();
-  }, []);
+   if (yaExiste) {
+     toast.error("Ese producto ya está en la lista");
+     return;
+   }
+
+   try {
+     await setDoc(doc(db, "sugeridos", nombreTrimmed), {
+       nombre: nombreTrimmed,
+       categoria: nuevaCategoria,
+       seleccionado: true,
+     });
+
+     toast.success(`"${nombreTrimmed}" guardado en Firebase`);
+     setNuevoNombre("");
+     setNuevaCategoria(ordenDeseado[0]);
+   } catch (error) {
+     toast.error("Error al guardar el producto");
+     console.error("Error al agregar producto:", error);
+   }
+ };
 
   const productosPorCategoria = productos.reduce((acc, prod) => {
     if (!acc[prod.categoria]) acc[prod.categoria] = [];
@@ -117,93 +147,65 @@ const ProdSugeridos = () => {
     return acc;
   }, {} as Record<string, ProductoMarcado[]>);
 
-  const toggleSeleccionado = async (nombre: string) => {
-    const producto = productos.find((p) => p.nombre === nombre);
-    if (!producto) return;
-
-    const nuevoEstado = !producto.seleccionado;
-    try {
-      if (nuevoEstado) {
-        await setDoc(doc(db, "sugeridos", nombre), {
-          nombre,
-          categoria: producto.categoria,
-          seleccionado: true,
-        });
-        toast.success(`${nombre} agregado a Firebase`);
-      } else {
-        await deleteDoc(doc(db, "sugeridos", nombre));
-        toast.info(`${nombre} eliminado de Firebase`);
-      }
-    } catch (error) {
-      toast.error("Error al actualizar Firebase");
-      console.error("Error toggleSeleccionado:", error);
-    }
-  };
-
   return (
-    <div>
-      {/* Mostrar la cuenta regresiva al principio si aún está activa */}
-      {cuentaRegresiva !== null ? (
-        <div className="contador">
-          <h3>{cuentaRegresiva === 0 ? "¡Listo!" : cuentaRegresiva}</h3>
-        </div>
-      ) : (
-        <>
-          {/* Formulario de agregar producto */}
-          <div className="agregar-producto">
-            <input
-              type="text"
-              value={nuevoNombre}
-              onChange={(e) => setNuevoNombre(e.target.value)}
-              placeholder="Nombre del producto"
-            />
-            <select
-              value={nuevaCategoria}
-              onChange={(e) => setNuevaCategoria(e.target.value)}
-            >
-              {ordenDeseado.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            <button onClick={agregarProducto}>Agregar</button>
-          </div>
-
-          {/* Listado de productos por categoría */}
-          <div className="prod-sugeridos">
-            {ordenDeseado.map((categoria) => {
-              const items = productosPorCategoria[categoria];
-              if (!items) return null;
-              return (
-                <div key={categoria}>
-                  <h2>{categoria}</h2>
-                  <ul>
-                    {items.map((prod) => (
-                      <label key={prod.nombre} className="prod-item">
-                        <input
-                          type="checkbox"
-                          checked={prod.seleccionado}
-                          onChange={() => toggleSeleccionado(prod.nombre)}
-                        />
-                        <span
-                          style={{
-                            textDecoration: prod.seleccionado
-                              ? "line-through"
-                              : "none",
-                          }}
-                        >
-                          {prod.nombre}
-                        </span>
-                      </label>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-        </>
-      )}
+    <div>    
+      <div className="agregar-producto">
+        <input
+          type="text"
+          value={nuevoNombre}
+          onChange={(e) => setNuevoNombre(e.target.value)}
+          placeholder="Nombre del producto"
+        />
+        <select
+          value={nuevaCategoria}
+          onChange={(e) => setNuevaCategoria(e.target.value)}
+        >
+          {ordenDeseado.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+        <button onClick={agregarProducto}>Agregar</button>
+      </div>
+      <hr/>
+      <br/>
+      <div className="MarcarProductos">
+        <button onClick={guardarSeleccionados}>Marcar productos</button>
+        {cargando && <p>Cargando productos marcados...</p>}
+      </div>
+      {/* Listado de productos por categoría */}
+      <div className="prod-sugeridos">
+        {ordenDeseado.map((categoria) => {
+          const items = productosPorCategoria[categoria];
+          if (!items) return null;
+          return (
+            <div key={categoria}>
+              <h2>{categoria}</h2>
+              <ul>
+                {items.map((prod) => (
+                  <label key={prod.nombre} className="prod-item">
+                    <input
+                      type="checkbox"
+                      checked={prod.seleccionado}
+                      onChange={() => toggleSeleccionado(prod.nombre)}
+                    />
+                    <span
+                      style={{
+                        textDecoration: prod.seleccionado
+                          ? "line-through"
+                          : "none",
+                      }}
+                    >
+                      {prod.nombre}
+                    </span>
+                  </label>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
