@@ -25,6 +25,7 @@
   { "nombre": "Esponja", "categoria": "Limpieza" },
   { "nombre": "Fiambres", "categoria": "Carniceria" },
   { "nombre": "Fideos", "categoria": "Almacen" },
+  { "nombre": "Fosforos", "categoria": "Limpieza" },
   { "nombre": "Galletitas Bagley", "categoria": "Almacen" },
   { "nombre": "Harina", "categoria": "Almacen" },
   { "nombre": "Harina Tortas", "categoria": "Almacen" },
