@@ -3,7 +3,14 @@
 import { useState, useEffect } from "react";
 import productosData from "../helpers/prodSug.json";
 import "../styles/ProdSugeridos.css";
-import { collection, doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../helpers/firebase";
 import { toast } from "react-toastify";
 
@@ -84,22 +91,25 @@ const ProdSugeridos = () => {
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "sugeridos"), (snapshot) => {
-      const productosFirestore: ProductoMarcado[] = [];
+      const productosFirestore: Record<string, boolean> = {};
 
       snapshot.forEach((doc) => {
         const data = doc.data();
-        if (data && data.nombre && data.categoria) {
-          productosFirestore.push(data as ProductoMarcado);
+        if (data?.nombre && data.seleccionado) {
+          productosFirestore[data.nombre] = true;
         }
       });
+      const productosCombinados: ProductoMarcado[] = productosData.map((p) => ({
+        ...p,
+        seleccionado: !!productosFirestore[p.nombre],
+      }));
 
-      setProductos(productosFirestore);
-      setCuentaRegresiva(30);
+      setProductos(productosCombinados);
+      setCuentaRegresiva(10);
     });
 
     return () => unsub();
   }, []);
-
 
   const productosPorCategoria = productos.reduce((acc, prod) => {
     if (!acc[prod.categoria]) acc[prod.categoria] = [];
@@ -107,91 +117,93 @@ const ProdSugeridos = () => {
     return acc;
   }, {} as Record<string, ProductoMarcado[]>);
 
-const toggleSeleccionado = async (nombre: string) => {
-  let nuevoEstado = false;
+  const toggleSeleccionado = async (nombre: string) => {
+    const producto = productos.find((p) => p.nombre === nombre);
+    if (!producto) return;
 
-  setProductos((prev) => {
-    const actualizados = prev.map((prod) => {
-      if (prod.nombre === nombre) {
-        nuevoEstado = !prod.seleccionado;
-        return { ...prod, seleccionado: nuevoEstado };
+    const nuevoEstado = !producto.seleccionado;
+    try {
+      if (nuevoEstado) {
+        await setDoc(doc(db, "sugeridos", nombre), {
+          nombre,
+          categoria: producto.categoria,
+          seleccionado: true,
+        });
+        toast.success(`${nombre} agregado a Firebase`);
+      } else {
+        await deleteDoc(doc(db, "sugeridos", nombre));
+        toast.info(`${nombre} eliminado de Firebase`);
       }
-      return prod;
-    });
-    return actualizados;
-  });
-
-  try {
-    await updateDoc(doc(db, "sugeridos", nombre), {
-      seleccionado: nuevoEstado,
-    });
-
-    toast.info(`Producto ${nuevoEstado ? "Seleccionado" : "Desactivado"}`);
-  } catch (error) {
-    toast.error("No se pudo guardar el cambio");
-    console.error("Error al guardar en Firebase:", error);
-  }
-};
-
+    } catch (error) {
+      toast.error("Error al actualizar Firebase");
+      console.error("Error toggleSeleccionado:", error);
+    }
+  };
 
   return (
     <div>
-      {cuentaRegresiva !== null && (
+      {/* Mostrar la cuenta regresiva al principio si aún está activa */}
+      {cuentaRegresiva !== null ? (
         <div className="contador">
           <h3>{cuentaRegresiva === 0 ? "¡Listo!" : cuentaRegresiva}</h3>
         </div>
-      )}
-      <div className="agregar-producto">
-        <input
-          type="text"
-          value={nuevoNombre}
-          onChange={(e) => setNuevoNombre(e.target.value)}
-          placeholder="Nombre del producto"
-        />
-        <select
-          value={nuevaCategoria}
-          onChange={(e) => setNuevaCategoria(e.target.value)}
-        >
-          {ordenDeseado.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-        <button onClick={agregarProducto}>Agregar</button>
-      </div>
+      ) : (
+        <>
+          {/* Formulario de agregar producto */}
+          <div className="agregar-producto">
+            <input
+              type="text"
+              value={nuevoNombre}
+              onChange={(e) => setNuevoNombre(e.target.value)}
+              placeholder="Nombre del producto"
+            />
+            <select
+              value={nuevaCategoria}
+              onChange={(e) => setNuevaCategoria(e.target.value)}
+            >
+              {ordenDeseado.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+            <button onClick={agregarProducto}>Agregar</button>
+          </div>
 
-      <div className="prod-sugeridos">
-        {ordenDeseado.map((categoria) => {
-          const items = productosPorCategoria[categoria];
-          if (!items) return null;
-          return (
-            <div key={categoria}>
-              <h2>{categoria}</h2>
-              <ul>
-                {items.map((prod) => (
-                  <label key={prod.nombre} className="prod-item">
-                    <input
-                      type="checkbox"
-                      checked={prod.seleccionado}
-                      onChange={() => toggleSeleccionado(prod.nombre)}
-                    />
-                    <span
-                      style={{
-                        textDecoration: prod.seleccionado
-                          ? "line-through"
-                          : "none",
-                      }}
-                    >
-                      {prod.nombre}
-                    </span>
-                  </label>
-                ))}
-              </ul>
-            </div>
-          );
-        })}
-      </div>
+          {/* Listado de productos por categoría */}
+          <div className="prod-sugeridos">
+            {ordenDeseado.map((categoria) => {
+              const items = productosPorCategoria[categoria];
+              if (!items) return null;
+              return (
+                <div key={categoria}>
+                  <h2>{categoria}</h2>
+                  <ul>
+                    {items.map((prod) => (
+                      <label key={prod.nombre} className="prod-item">
+                        <input
+                          type="checkbox"
+                          checked={prod.seleccionado}
+                          onChange={() => toggleSeleccionado(prod.nombre)}
+                        />
+                        <span
+                          style={{
+                            textDecoration: prod.seleccionado
+                              ? "line-through"
+                              : "none",
+                          }}
+                        >
+                          {prod.nombre}
+                        </span>
+                      </label>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 };
