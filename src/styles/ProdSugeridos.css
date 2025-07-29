@@ -88,15 +88,36 @@
   background-color: #3c8f44;
 }
 
-
 .MarcarProductos {
-  margin-top: 1rem;
   text-align: center;
+}
+
+.MarcarProductos button {
+  background-color: #28a745;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.MarcarProductos button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+.MarcarProductos button:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsive: 1 columna en pantallas chicas */
 @media (max-width: 768px) {
- .agregar-producto {
+  .agregar-producto {
     flex-direction: column;
     align-items: stretch;
   }

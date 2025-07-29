@@ -33,8 +33,6 @@ const ProdSugeridos = () => {
   const [nuevoNombre, setNuevoNombre] = useState("");
   const [nuevaCategoria, setNuevaCategoria] = useState(ordenDeseado[0]);
 
-  const [cargando, setCargando] = useState(true);
-
   useEffect(() => {
     const cargarSeleccionados = async () => {
       Notiflix.Loading.circle("Cargando productos marcados...");
@@ -86,7 +84,7 @@ const ProdSugeridos = () => {
       toast.warn("No hay productos seleccionados para guardar.");
       return;
     }
-
+    Notiflix.Loading.circle("Guardando productos...");
     try {
       for (const prod of seleccionados) {
         await setDoc(doc(db, "sugeridos", prod.nombre), {
@@ -99,6 +97,8 @@ const ProdSugeridos = () => {
     } catch (error) {
       toast.error("Error al guardar productos.");
       console.error("Error guardarSeleccionados:", error);
+    } finally {
+      Notiflix.Loading.remove();
     }
   };
 
@@ -118,7 +118,7 @@ const ProdSugeridos = () => {
       toast.error("Ese producto ya está en la lista");
       return;
     }
-
+    Notiflix.Loading.circle("Agregando producto...");
     try {
       await setDoc(doc(db, "sugeridos", nombreTrimmed), {
         nombre: nombreTrimmed,
@@ -132,6 +132,8 @@ const ProdSugeridos = () => {
     } catch (error) {
       toast.error("Error al guardar el producto");
       console.error("Error al agregar producto:", error);
+    } finally {
+      Notiflix.Loading.remove();
     }
   };
 
@@ -166,7 +168,6 @@ const ProdSugeridos = () => {
       <br />
       <div className="MarcarProductos">
         <button onClick={guardarSeleccionados}>Marcar productos</button>
-        {cargando && <p>Cargando productos marcados...</p>}
       </div>
       {/* Listado de productos por categoría */}
       <div className="prod-sugeridos">
@@ -182,6 +183,7 @@ const ProdSugeridos = () => {
                     <input
                       type="checkbox"
                       checked={prod.seleccionado}
+                      disabled={prod.seleccionado}
                       onChange={() => toggleSeleccionado(prod.nombre)}
                     />
                     <span
