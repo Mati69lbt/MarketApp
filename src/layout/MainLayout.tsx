@@ -1,4 +1,4 @@
-import {Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
   signOut,
@@ -38,9 +38,9 @@ const MainLayout = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      console.log("Sesión cerrada");
+      toast.success("Sesión cerrada");
     } catch (error) {
-      console.error("Error al cerrar sesión", error);
+      toast.error("Error al cerrar sesión");
     }
   };
   return (
@@ -75,15 +75,17 @@ const MainLayout = () => {
           </NavLink>
         </div>
 
-        {usuario ? (
-          <button className="logOut" onClick={handleLogout}>
-            Log Out
-          </button>
-        ) : (
-          <button className="logIn" onClick={handleLogin}>
-            Log In
-          </button>
-        )}
+        <div className="grupo-3">
+          {usuario ? (
+            <button className="logOut" onClick={handleLogout}>
+              Log Out
+            </button>
+          ) : (
+            <button className="logIn" onClick={handleLogin}>
+              Log In
+            </button>
+          )}
+        </div>
       </nav>
 
       <main>

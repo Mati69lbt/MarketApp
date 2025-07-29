@@ -51,6 +51,9 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
+.grupo-3 {
+  max-width: 80%;
+}
 
 .logIn {
   background-color: #ff4d4d;

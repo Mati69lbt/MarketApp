@@ -3,17 +3,10 @@
 import { useState, useEffect } from "react";
 import productosData from "../helpers/prodSug.json";
 import "../styles/ProdSugeridos.css";
-import {
-  collection,
-  deleteDoc,
-  getDocs,
-  doc,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 import { db } from "../helpers/firebase";
 import { toast } from "react-toastify";
+import Notiflix from "notiflix";
 
 export interface ProductoSugerido {
   nombre: string;
@@ -44,6 +37,7 @@ const ProdSugeridos = () => {
 
   useEffect(() => {
     const cargarSeleccionados = async () => {
+      Notiflix.Loading.circle("Cargando productos marcados...");
       try {
         const snapshot = await getDocs(collection(db, "sugeridos"));
         const productosSeleccionados: Record<string, boolean> = {};
@@ -68,7 +62,7 @@ const ProdSugeridos = () => {
         toast.error("Error al cargar productos seleccionados");
         console.error("Error al cargar productos:", error);
       } finally {
-        setCargando(false);
+        Notiflix.Loading.remove();
       }
     };
 
@@ -108,38 +102,38 @@ const ProdSugeridos = () => {
     }
   };
 
- const agregarProducto = async () => {
-   const nombreTrimmed = nuevoNombre.trim();
+  const agregarProducto = async () => {
+    const nombreTrimmed = nuevoNombre.trim();
 
-   if (!nombreTrimmed) {
-     toast.warn("El nombre está vacío. No se agrega.");
-     return;
-   }
+    if (!nombreTrimmed) {
+      toast.warn("El nombre está vacío. No se agrega.");
+      return;
+    }
 
-   const yaExiste = productos.some(
-     (p) => p.nombre.toLowerCase() === nombreTrimmed.toLowerCase()
-   );
+    const yaExiste = productos.some(
+      (p) => p.nombre.toLowerCase() === nombreTrimmed.toLowerCase()
+    );
 
-   if (yaExiste) {
-     toast.error("Ese producto ya está en la lista");
-     return;
-   }
+    if (yaExiste) {
+      toast.error("Ese producto ya está en la lista");
+      return;
+    }
 
-   try {
-     await setDoc(doc(db, "sugeridos", nombreTrimmed), {
-       nombre: nombreTrimmed,
-       categoria: nuevaCategoria,
-       seleccionado: true,
-     });
+    try {
+      await setDoc(doc(db, "sugeridos", nombreTrimmed), {
+        nombre: nombreTrimmed,
+        categoria: nuevaCategoria,
+        seleccionado: true,
+      });
 
-     toast.success(`"${nombreTrimmed}" guardado en Firebase`);
-     setNuevoNombre("");
-     setNuevaCategoria(ordenDeseado[0]);
-   } catch (error) {
-     toast.error("Error al guardar el producto");
-     console.error("Error al agregar producto:", error);
-   }
- };
+      toast.success(`"${nombreTrimmed}" guardado en Firebase`);
+      setNuevoNombre("");
+      setNuevaCategoria(ordenDeseado[0]);
+    } catch (error) {
+      toast.error("Error al guardar el producto");
+      console.error("Error al agregar producto:", error);
+    }
+  };
 
   const productosPorCategoria = productos.reduce((acc, prod) => {
     if (!acc[prod.categoria]) acc[prod.categoria] = [];
@@ -148,7 +142,7 @@ const ProdSugeridos = () => {
   }, {} as Record<string, ProductoMarcado[]>);
 
   return (
-    <div>    
+    <div>
       <div className="agregar-producto">
         <input
           type="text"
@@ -168,8 +162,8 @@ const ProdSugeridos = () => {
         </select>
         <button onClick={agregarProducto}>Agregar</button>
       </div>
-      <hr/>
-      <br/>
+      <hr />
+      <br />
       <div className="MarcarProductos">
         <button onClick={guardarSeleccionados}>Marcar productos</button>
         {cargando && <p>Cargando productos marcados...</p>}

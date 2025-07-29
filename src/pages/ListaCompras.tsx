@@ -4,6 +4,7 @@ import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../helpers/firebase";
 import "../styles/ListaCompras.css";
 import { toast } from "react-toastify";
+import Notiflix from "notiflix";
 
 interface Producto {
   nombre: string;
@@ -21,17 +22,15 @@ const ordenDeseado = [
 
 const ListaCompras = () => {
   const [seleccionados, setSeleccionados] = useState<Producto[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const obtenerProductos = async () => {
-    setLoading(true);
+    Notiflix.Loading.circle("Procesando...");
     try {
       const snapshot = await getDocs(collection(db, "sugeridos"));
       const productos: Producto[] = [];
 
       snapshot.forEach((doc) => {
         const data = doc.data();
-        console.log("Documento leído:", data);
         if (
           data &&
           data.seleccionado === true &&
@@ -41,15 +40,13 @@ const ListaCompras = () => {
           productos.push(data as Producto);
         }
       });
-      console.log("Productos filtrados:", productos);
+
       setSeleccionados(productos);
     } catch (error) {
       toast.error("Error al cargar productos");
       console.error("Error al obtener productos:", error);
     } finally {
-      console.log("se activo el finally");
-
-      setLoading(false);
+      Notiflix.Loading.remove();
     }
   };
 
@@ -58,20 +55,33 @@ const ListaCompras = () => {
   }, []);
 
   const borrarProducto = async (nombre: string) => {
-    const confirmar = window.confirm(`¿Ya compraste "${nombre}"?`);
-    if (!confirmar) return;
-
-    setLoading(true);
-    try {
-      await deleteDoc(doc(db, "sugeridos", nombre));
-      setSeleccionados((prev) => prev.filter((p) => p.nombre !== nombre));
-      toast.success(`"${nombre}" eliminado de la lista`);
-    } catch (error) {
-      toast.error("No se pudo eliminar el producto");
-      console.error("Error al borrar producto:", error);
-    } finally {
-      setLoading(false);
-    }
+    Notiflix.Confirm.show(
+      "¿Confirmar compra?",
+      `¿Ya compraste "${nombre}"?`,
+      "Sí",
+      "Cancelar",
+      async function okCb() {
+        Notiflix.Loading.circle("Procesando...");
+        try {
+          await deleteDoc(doc(db, "sugeridos", nombre));
+          setSeleccionados((prev) => prev.filter((p) => p.nombre !== nombre));
+          toast.success(`"${nombre}" eliminado de la lista`);
+        } catch (error) {
+          toast.error("No se pudo eliminar el producto");
+          console.error("Error al borrar producto:", error);
+        } finally {
+          Notiflix.Loading.remove();
+        }
+      },
+      function cancelCb() {
+        // Cancelado, no hacer nada
+      },
+      {
+        titleColor: "#333",
+        okButtonBackground: "#4caf50",
+        cancelButtonBackground: "#ccc",
+      }
+    );
   };
 
   const productosPorCategoria = seleccionados.reduce((acc, prod) => {
@@ -82,37 +92,29 @@ const ListaCompras = () => {
 
   return (
     <div className="lista-compras">
-      {loading ? (
-        <div className="cargando">Cargando...</div>
+      <h1>Lista de Compras</h1>
+      {seleccionados.length === 0 ? (
+        <span className="sin-productos">No hay productos seleccionados</span>
       ) : (
-        <>
-          <h1>Lista de Compras</h1>
-          {seleccionados.length === 0 ? (
-            <span className="sin-productos">
-              No hay productos seleccionados
-            </span>
-          ) : (
-            ordenDeseado.map((categoria) => {
-              const items = productosPorCategoria[categoria];
-              if (!items) return null;
-              return (
-                <div key={categoria}>
-                  <h2>{categoria}</h2>
-                  <ul>
-                    {items.map((prod) => (
-                      <li
-                        key={prod.nombre}
-                        onClick={() => borrarProducto(prod.nombre)}
-                      >
-                        {prod.nombre}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })
-          )}
-        </>
+        ordenDeseado.map((categoria) => {
+          const items = productosPorCategoria[categoria];
+          if (!items) return null;
+          return (
+            <div key={categoria}>
+              <h2>{categoria}</h2>
+              <ul>
+                {items.map((prod) => (
+                  <li
+                    key={prod.nombre}
+                    onClick={() => borrarProducto(prod.nombre)}
+                  >
+                    {prod.nombre}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })
       )}
     </div>
   );
