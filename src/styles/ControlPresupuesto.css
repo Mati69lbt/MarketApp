@@ -142,8 +142,8 @@
 
 @media (max-width: 480px) {
   .circular-text {
-    top: 30%;
-    left: 50%;
+    top: 50%;
+    left: 45%;
     margin-top: -2rem;
   }
   .textGastado {

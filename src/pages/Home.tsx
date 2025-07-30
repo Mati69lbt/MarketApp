@@ -170,7 +170,7 @@ function Home() {
       )}
 
       <div className="footer">
-        <p>&copy; {new Date().getFullYear()} - MDelgado (JUL) - V21.2</p>
+        <p>&copy; {new Date().getFullYear()} - MDelgado (JUL) - V21.3</p>
       </div>
     </div>
   );
