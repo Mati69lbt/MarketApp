@@ -1,7 +1,12 @@
+//cspell: ignore file Notiflix comparacion firestore notiflix vacio
 import React, { useEffect, useState } from "react";
 import type { Gasto } from "../types/Gasto";
 import { formatearMoneda, limpiarInput } from "../helpers";
 import InputMoneda from "../components/InputMoneda";
+import { toast } from "react-toastify";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../helpers/firebase";
+import Notiflix from "notiflix";
 
 type GastoConInputs = Gasto & {
   precioTicket: number;
@@ -9,9 +14,7 @@ type GastoConInputs = Gasto & {
 };
 
 const CompararTicket = () => {
-  const [gastos, setGastos] = useState<Gasto[]>(
-    JSON.parse(localStorage.getItem("gastos") || "[]")
-  );
+  const [gastos, setGastos] = useState<Gasto[]>([]);
   const [chequeoTicket, setChequeoTicket] = useState<number>(0);
   const [gastosConInputs, setGastosConInputs] = useState<GastoConInputs[]>(
     gastos.map((g) => ({
@@ -20,6 +23,28 @@ const CompararTicket = () => {
       descuento: 0,
     }))
   );
+
+  useEffect(() => {
+    const cargarGastos = async () => {
+      Notiflix.Loading.circle("Cargando datos...");
+      try {
+        const docRef = doc(db, "gastos", "lista");
+        const snapshot = await getDoc(docRef);
+        if (snapshot.exists()) {
+          const data = snapshot.data();
+          if (Array.isArray(data?.gastos)) {
+            setGastos(data.gastos);
+          }
+        }
+      } catch (error) {
+        toast.error("Error al cargar los gastos");
+        console.error("Error al obtener los gastos:", error);
+      } finally {
+        Notiflix.Loading.remove();
+      }
+    };
+    cargarGastos();
+  }, []);
 
   useEffect(() => {
     const conInputs: GastoConInputs[] = gastos.map((g) => ({

@@ -1,4 +1,4 @@
-// cspell: ignore Resetear
+// cspell: ignore Resetear App Firestore Notiflix firestore mostrás notiflix
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import type { Gasto } from "../types/Gasto";
 import {
@@ -6,6 +6,10 @@ import {
   CircularProgressbarWithChildren,
 } from "react-circular-progressbar";
 import "../styles/ControlPresupuesto.css";
+import Notiflix from "notiflix";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../helpers/firebase";
+import { toast } from "react-toastify";
 
 interface Props {
   gastos: Gasto[];
@@ -53,12 +57,34 @@ const ControlPresupuesto = ({
   };
 
   const handleResetApp = () => {
-    const confirmar = window.confirm("¿Desea Reiniciar la App?");
-    if (confirmar) {
-      setGastos([]);
-      setPresupuesto(0);
-      setIsValidPresupuesto(false);
-    }
+    Notiflix.Confirm.show(
+      "Confirmar reinicio",
+      "¿Desea Reiniciar la App?",
+      "Sí, reiniciar",
+      "Cancelar",
+      async () => {
+        try {
+          Notiflix.Loading.circle("Reiniciando datos...");
+
+          await setDoc(doc(db, "presupuesto", "valor"), { valor: 0 });
+          await setDoc(doc(db, "gastos", "lista"), { gastos: [] });
+
+          setGastos([]);
+          setPresupuesto(0);
+          setIsValidPresupuesto(false);
+
+          toast.success("La app fue reiniciada correctamente.");
+        } catch (error) {
+          console.error("Error al reiniciar datos en Firestore:", error);
+          toast.error("Hubo un error al reiniciar los datos.");
+        } finally {
+          Notiflix.Loading.remove();
+        }
+      },
+      () => {
+        toast.info("Reinicio cancelado.");
+      }
+    );
   };
 
   const exportarJSON = () => {
