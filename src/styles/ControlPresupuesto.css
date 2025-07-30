@@ -70,6 +70,7 @@
   border-radius: 1rem;
   transition-property: background-color;
   transition-duration: 300ms;
+  margin-top: 2rem;
 }
 .reset-app:hover {
   background-color: #c71465;
@@ -104,20 +105,32 @@
   border-radius: 5px;
 }
 
+.grafico-presupuesto {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;  
+}
+
 .circular-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #3b82f6; /* valor por defecto, se puede sobrescribir inline si es dinámico */
-  margin-top: 14rem;
-  margin-left: -8rem;
-  font-size: 3rem;
+  font-size: 1.8rem;
   text-align: center;
+  color: #3b82f6;
+  width: 100%;
+  height: 100%;
+  
 }
 
 .circular-text strong {
-  font-size: 3rem;
+  font-size: 2.4rem;
 }
 
 .rojo {
@@ -126,18 +139,4 @@
 
 .azul {
   color: #3b82f6;
-}
-
-/* Responsive para pantallas pequeñas */
-@media (max-width: 480px) {
-  .circular-text {
-    font-size: 3rem;
-    margin-top: -14rem;
-    margin-left: 2rem;
-  }
-
-  .circular-text div {
-    font-size: 3rem;
-    margin-top: -4rem;
-  }
 }

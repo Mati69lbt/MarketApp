@@ -111,7 +111,7 @@ const ControlPresupuesto = ({
 
   return (
     <div className="contenedor-presupuesto contenedor sombra dos-columnas">
-      <div>
+      <div className="grafico-presupuesto">
         <CircularProgressbarWithChildren
           value={porcentaje}
           styles={buildStyles({
@@ -127,6 +127,7 @@ const ControlPresupuesto = ({
           </div>
         </CircularProgressbarWithChildren>
       </div>
+
       <div className="contenido-presupuesto">
         <button className="reset-app" type="button" onClick={handleResetApp}>
           Resetear App
