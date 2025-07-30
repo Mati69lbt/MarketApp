@@ -20,7 +20,7 @@
 .prod-sugeridos h2 {
   text-align: center;
   color: #2c3e50;
-  font-size: 2.rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
   margin-top: 0;
 }
@@ -130,17 +130,15 @@
     max-width: none;
     font-size: 1.5rem;
   }
-    .prod-sugeridos {
+  .prod-sugeridos {
     justify-content: space-evenly; /* distribuir mejor el espacio */
   }
 
   .prod-sugeridos > div {
-    flex: 1 1 45%;       /* 💥 dos columnas en móviles */
+    flex: 1 1 45%; /* 💥 dos columnas en móviles */
     max-width: 45%;
     min-width: 140px;
   }
-}
-
   .prod-sugeridos h2 {
     font-size: 2rem;
     text-align: center;
