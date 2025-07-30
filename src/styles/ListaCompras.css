@@ -73,8 +73,8 @@
   }
 
   .categoria {
-    flex: 1 1 45%; /* 💥 dos columnas en móviles */
-    max-width: 45%;
+    flex: 1 1 40%; /* 💥 dos columnas en móviles */
+    max-width: 40%;
     min-width: 140px;
   }
   .categoria h2 {
