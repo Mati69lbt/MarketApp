@@ -129,7 +129,7 @@
 }
 
 /* Responsive para pantallas pequeñas */
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .circular-text {
     font-size: 3rem;
     margin-top: -14rem;
