@@ -212,7 +212,7 @@ header h1 {
 }
 
 main {
-  padding-top: 10rem;
+  padding-top: 1rem;
 }
 
 .filtros .campo {
@@ -312,8 +312,6 @@ main {
 .nuevo-gasto img:hover {
   cursor: pointer;
 }
-
-
 
 /*** SWIPE LIST OVERRIDES **/
 .swipe-action__leading {

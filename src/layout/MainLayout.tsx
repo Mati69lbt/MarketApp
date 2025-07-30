@@ -46,7 +46,17 @@ const MainLayout = () => {
   return (
     <div>
       <nav className="navbar">
-        <div className="grupo-1">
+        <div className="navbar-header">
+          <button
+            className="menu-toggle"
+            onClick={() => document.body.classList.toggle("menu-open")}
+          >
+            ☰
+          </button>
+          <div className="logo">🛒 MarketApp</div>
+        </div>
+
+        <div className="navbar-links">
           <NavLink
             to="/"
             className={({ isActive }) => (isActive ? "activo" : "")}
@@ -59,8 +69,6 @@ const MainLayout = () => {
           >
             Comparación
           </NavLink>
-        </div>
-        <div className="grupo-2">
           <NavLink
             to="/productos"
             className={({ isActive }) => (isActive ? "activo" : "")}
@@ -73,9 +81,6 @@ const MainLayout = () => {
           >
             Compras
           </NavLink>
-        </div>
-
-        <div className="grupo-3">
           {usuario ? (
             <button className="logOut" onClick={handleLogout}>
               Log Out

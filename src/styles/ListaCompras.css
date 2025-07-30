@@ -1,3 +1,29 @@
+.categorias-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.categoria {
+  flex: 1 1 20%;
+  max-width: 20%;
+  min-width: 280px;
+  background-color: #fdfdfd;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.lista-compras h1 {
+ text-align: center;
+ text-decoration: underline;
+ margin-bottom: 0.5rem;
+ margin-top: 0;
+}
+
 .lista-compras ul {
   list-style: none;
   padding-left: 0;
@@ -35,6 +61,29 @@
 }
 @media (max-width: 768px) {
   .lista-compras li {
-    font-size: 2em; /* tamaño de fuente más pequeño en pantallas chicas */
+    font-size: 1.5em; /* tamaño de fuente más pequeño en pantallas chicas */
+  }
+  .lista-compras h1 {
+    text-align: center;
+    font-size: 1.5em; /* tamaño de fuente más pequeño en pantallas chicas */
+    text-decoration: underline;
+  }
+  .categorias-grid {
+    justify-content: space-evenly; /* distribuir mejor el espacio */
+  }
+
+  .categoria {
+    flex: 1 1 45%; /* 💥 dos columnas en móviles */
+    max-width: 45%;
+    min-width: 140px;
+  }
+  .categoria h2 {
+    font-size: 2rem; /* tamaño de fuente más pequeño en pantallas chicas */
+    text-align: center;
+    margin-top: 0;
+    text-decoration: underline;
+  }
+  .categoria li {
+    font-size: 1.5rem; /* tamaño de fuente más pequeño en pantallas chicas */
   }
 }

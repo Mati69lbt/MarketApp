@@ -67,15 +67,34 @@ const ProdSugeridos = () => {
     cargarSeleccionados();
   }, []);
 
-  const toggleSeleccionado = (nombre: string) => {
-    setProductos((prev) =>
-      prev.map((prod) =>
-        prod.nombre === nombre
-          ? { ...prod, seleccionado: !prod.seleccionado }
-          : prod
-      )
+const toggleSeleccionado = (nombre: string) => {
+  const producto = productos.find((p) => p.nombre === nombre);
+
+  if (producto && !producto.seleccionado) {
+    toast.info(
+      "✅No olvides hacer clic en 'Marcar Productos' para guardar.",
+      {
+        position: "top-center",
+        autoClose: 1000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        style: {
+          fontSize: "3rem",
+        },
+      }
     );
-  };
+  }
+
+  setProductos((prev) =>
+    prev.map((prod) =>
+      prod.nombre === nombre
+        ? { ...prod, seleccionado: !prod.seleccionado }
+        : prod
+    )
+  );
+};
+
 
   const guardarSeleccionados = async () => {
     const seleccionados = productos.filter((p) => p.seleccionado);

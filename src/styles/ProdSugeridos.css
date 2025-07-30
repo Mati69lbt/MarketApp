@@ -7,8 +7,9 @@
 }
 
 .prod-sugeridos > div {
-  flex: 1 1 280px;
-  max-width: 320px;
+  flex: 1 1 20%;
+  max-width: 20%;
+  min-width: 280px;
   background-color: #fdfdfd;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -19,7 +20,7 @@
 .prod-sugeridos h2 {
   text-align: center;
   color: #2c3e50;
-  font-size: 2.5remrem;
+  font-size: 2.rem;
   margin-bottom: 1rem;
   margin-top: 0;
 }
@@ -119,28 +120,34 @@
 @media (max-width: 768px) {
   .agregar-producto {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
   }
 
   .agregar-producto input,
   .agregar-producto select,
   .agregar-producto button {
-    width: 100%;
+    width: 90%;
     max-width: none;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
   }
-  .prod-sugeridos > div {
-    flex: 1 1 100%;
-    max-width: 100%;
+    .prod-sugeridos {
+    justify-content: space-evenly; /* distribuir mejor el espacio */
   }
 
+  .prod-sugeridos > div {
+    flex: 1 1 45%;       /* 💥 dos columnas en móviles */
+    max-width: 45%;
+    min-width: 140px;
+  }
+}
+
   .prod-sugeridos h2 {
-    font-size: 5rem;
+    font-size: 2rem;
     text-align: center;
     margin-top: 0;
   }
   .prod-sugeridos ul {
-    font-size: 3rem;
+    font-size: 1.5rem;
   }
   .prod-item {
     margin-bottom: 2rem;

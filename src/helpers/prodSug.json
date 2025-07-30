@@ -67,5 +67,18 @@
   { "nombre": "Traviatas", "categoria": "Almacen" },
   { "nombre": "Toallitas", "categoria": "Cuidado Personal" },
   { "nombre": "Vinagre", "categoria": "Almacen" },
-  { "nombre": "Yerba", "categoria": "Almacen" }
+  { "nombre": "Yerba", "categoria": "Almacen" },
+  { "nombre": "Patinesas", "categoria": "Carniceria" },
+  { "nombre": "Pechuga de Pollo", "categoria": "Carniceria" },
+  { "nombre": "Carne Picada", "categoria": "Carniceria" },
+  { "nombre": "Chorizos", "categoria": "Carniceria" },
+  { "nombre": "Mollejas", "categoria": "Carniceria" },
+  { "nombre": "Asado de Tira", "categoria": "Carniceria" },
+  { "nombre": "Tapa de Asado", "categoria": "Carniceria" },
+  { "nombre": "Vacío", "categoria": "Carniceria" },
+  { "nombre": "Pechito", "categoria": "Carniceria" },
+  { "nombre": "Costilla", "categoria": "Carniceria" },
+  { "nombre": "Matambre", "categoria": "Carniceria" },
+  { "nombre": "Lengua a la Vinagreta", "categoria": "Carniceria" },
+  { "nombre": "Morcilla", "categoria": "Carniceria" }
 ]
