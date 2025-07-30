@@ -17,7 +17,6 @@
   gap: 0.5rem;
 }
 
-/* Botón hamburguesa */
 .menu-toggle {
   font-size: 2rem;
   background: none;
@@ -45,8 +44,8 @@
   flex-wrap: wrap;
 }
 
-.navbar a,
-.navbar button {
+/* Enlaces de navegación */
+.navbar a {
   text-decoration: none;
   font-weight: 600;
   color: #333;
@@ -58,26 +57,42 @@
   cursor: pointer;
 }
 
+/* Botones generales dentro de nav */
+.navbar .nav-button {
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
 /* Activo */
 .navbar .activo {
   background-color: #b7c00698;
   color: black;
 }
 
-/* Botones */
+/* Botón Log In */
 .logIn {
-  background-color: #ff4d4d;
-  color: white;
+  background-color: #ff4d4d !important;
+  color: white !important;
+  border-radius: 6px;
 }
+
 .logIn:hover {
-  background-color: #cc0000;
+  background-color: #cc0000 !important;
 }
+
+/* Botón Log Out */
 .logOut {
-  background-color: #4caf50;
-  color: white;
+  background-color: #4caf50 !important;
+  color: white !important;
+  border-radius: 6px;
 }
+
 .logOut:hover {
-  background-color: #3c8f44;
+  background-color: #3c8f44 !important;
 }
 
 /* MODO MOBILE */
@@ -97,7 +112,7 @@
   }
 
   .navbar a,
-  .navbar button {
+  .navbar .nav-button {
     width: 100%;
     text-align: center;
   }
