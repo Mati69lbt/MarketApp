@@ -123,7 +123,7 @@ const ControlPresupuesto = ({
             className={`circular-text ${porcentaje > 100 ? "rojo" : "azul"}`}
           >
             <strong>{porcentaje}%</strong>
-            <div>Gastado</div>
+            <div className="textGastado">Gastado</div>
           </div>
         </CircularProgressbarWithChildren>
       </div>

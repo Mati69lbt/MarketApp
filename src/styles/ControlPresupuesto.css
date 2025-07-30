@@ -109,28 +109,27 @@
   position: relative;
   width: 200px;
   height: 200px;
-  margin: 0 auto;  
+  margin: 0 auto;
 }
 
 .circular-text {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 80%;
+  left: 40%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
+  font-size: 2.5rem;
   text-align: center;
   color: #3b82f6;
   width: 100%;
   height: 100%;
-  
 }
 
 .circular-text strong {
-  font-size: 2.4rem;
+  font-size: 3rem;
 }
 
 .rojo {
@@ -139,4 +138,15 @@
 
 .azul {
   color: #3b82f6;
+}
+
+@media (max-width: 480px) {
+  .circular-text {
+    top: 30%;
+    left: 50%;
+    margin-top: -2rem;
+  }
+  .textGastado {
+    margin-top: -4rem;
+  }
 }
