@@ -43,6 +43,11 @@ const MainLayout = () => {
       toast.error("Error al cerrar sesión");
     }
   };
+
+  const cerrarMenu = () => {
+    document.body.classList.remove("menu-open");
+  };
+
   return (
     <div>
       <nav className="navbar">
@@ -59,24 +64,28 @@ const MainLayout = () => {
         <div className="navbar-links">
           <NavLink
             to="/"
+            onClick={cerrarMenu}
             className={({ isActive }) => (isActive ? "activo" : "")}
           >
             Inicio
           </NavLink>
           <NavLink
             to="/comparacion"
+            onClick={cerrarMenu}
             className={({ isActive }) => (isActive ? "activo" : "")}
           >
             Comparación
           </NavLink>
           <NavLink
             to="/productos"
+            onClick={cerrarMenu}
             className={({ isActive }) => (isActive ? "activo" : "")}
           >
             Sugeridos
           </NavLink>
           <NavLink
             to="/compras"
+            onClick={cerrarMenu}
             className={({ isActive }) => (isActive ? "activo" : "")}
           >
             Compras
