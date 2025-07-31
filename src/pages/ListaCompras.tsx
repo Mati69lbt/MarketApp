@@ -93,6 +93,9 @@ const ListaCompras = () => {
   return (
     <div className="lista-compras">
       <h1>Lista de Compras</h1>
+      <button className="actualizar" onClick={obtenerProductos}>
+        Actualizar Lista
+      </button>
       {seleccionados.length === 0 ? (
         <span className="sin-productos">No hay productos seleccionados</span>
       ) : (
