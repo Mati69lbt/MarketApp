@@ -91,6 +91,14 @@ header h1 {
   transform: scale(1.2);
 }
 
+.footer{
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--gris-claro);
+  color: var(--gris-oscuro);
+  font-size: 1.4rem;
+}
+
 @media (min-width: 768px) {
   .formulario {
     padding: 5rem 0;
