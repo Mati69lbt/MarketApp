@@ -19,7 +19,7 @@ const App = () => {
           <Route path="/compras" element={<ListaCompras />} />
         </Route>
       </Routes>
-      <ToastContainer position="top-center" autoClose={2000} />
+      <ToastContainer position="bottom-center" autoClose={2000} />
     </>
   );
 };

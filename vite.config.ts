@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [
     react(),
     viteCompression(), // Aplica gzip por defecto
+    
   ],
 });
