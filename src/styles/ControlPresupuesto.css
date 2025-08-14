@@ -38,6 +38,8 @@
 
 .contenido-presupuesto {
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 .contenido-presupuesto p {
   font-weight: 400;
@@ -110,6 +112,7 @@
   width: 200px;
   height: 200px;
   margin: 0 auto;
+  z-index: 0;
 }
 
 .circular-text {
@@ -130,6 +133,12 @@
 
 .circular-text strong {
   font-size: 3rem;
+}
+
+.grafico-presupuesto svg,
+.grafico-presupuesto .CircularProgressbar,
+.circular-text {
+  pointer-events: none;
 }
 
 .rojo {
