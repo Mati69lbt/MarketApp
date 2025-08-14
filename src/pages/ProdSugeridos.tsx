@@ -74,7 +74,7 @@ const toggleSeleccionado = (nombre: string) => {
     toast.info(
       "✅No olvides hacer clic en 'Marcar Productos' para guardar.",
       {
-        position: "top-center",
+        position: "bottom-center",
         autoClose: 1000,
         closeOnClick: true,
         pauseOnHover: true,
