@@ -19,7 +19,6 @@ const Header = ({
   setPresupuesto,
   isValidPresupuesto,
   setIsValidPresupuesto,
-
 }: HeaderProps) => {
   return (
     <header>
@@ -31,7 +30,6 @@ const Header = ({
           setGastos={setGastos}
           setPresupuesto={setPresupuesto}
           setIsValidPresupuesto={setIsValidPresupuesto}
-          
         />
       ) : (
         <NuevoPresupuesto

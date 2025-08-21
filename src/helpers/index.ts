@@ -8,11 +8,11 @@ export const formatearFecha = (fecha: string | number): string => {
   const fechaNueva = new Date(fecha);
   if (isNaN(fechaNueva.getTime())) return "Fecha inválida";
 
-  return fechaNueva.toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  });
+  const dia = String(fechaNueva.getDate()).padStart(2, "0");
+  const mes = String(fechaNueva.getMonth() + 1).padStart(2, "0"); // +1 porque enero = 0
+  const anio = String(fechaNueva.getFullYear()).slice(-2); // últimos 2 dígitos
+
+  return `${dia}/${mes}/${anio}`;
 };
 
 export const formatearHora = (fecha: string | number): string => {

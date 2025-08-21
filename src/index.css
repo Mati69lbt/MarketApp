@@ -567,3 +567,16 @@ input[type="text"] {
     margin-top: 0.5rem;
   }
 }
+
+.descripcion-gasto .detalle-gasto {
+  font-size: 1.8rem;
+  color: var(--gris);
+  font-weight: 500;
+  margin: 0.3rem 0;
+}
+
+.descripcion-gasto .detalle-gasto span {
+  margin: 0 0.5rem;
+  color: var(--gris-oscuro);
+  font-weight: 700;
+}

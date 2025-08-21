@@ -35,7 +35,7 @@ interface Props {
 }
 
 const Pago = ({ gasto, setGastoEditar, eliminarGasto }: Props) => {
-  const { categoria, nombre, id, subTotal, fecha } = gasto;
+  const { categoria, nombre, id, subTotal, fecha, cantidad, unidades } = gasto;
   const formatearNumero = (valor: number) => {
     if (!valor) return "";
     return valor.toLocaleString("es-AR", {
@@ -69,9 +69,13 @@ const Pago = ({ gasto, setGastoEditar, eliminarGasto }: Props) => {
           <div className="contenido-gasto">
             <img src={diccIconos[categoria]} />
             <div className="descripcion-gasto">
-              <p className="categoria">{categoria}</p>
+              {/* <p className="categoria">{categoria}</p> */}
               <p className="nombre-gasto">
                 {nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase()}
+              </p>
+              <p className="detalle-gasto">
+                Cant: {unidades} <span>-</span> PU:{" "}
+                {formatearNumero(cantidad)}
               </p>
               <p className="fecha-gasto">
                 <span>

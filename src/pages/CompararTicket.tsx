@@ -140,7 +140,7 @@ const CompararTicket = () => {
             return (
               <tr key={gasto.id}>
                 <td className="index">{index + 1}</td>
-                <td className="col-producto">{gasto.nombre}</td>
+                <td className="col-producto">{gasto.nombre} - {gasto.unidades}</td>
                 <td className="col-precio-app">
                   {formatearMoneda(gasto.subTotal)}
                 </td>
