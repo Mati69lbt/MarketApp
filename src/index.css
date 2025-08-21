@@ -91,7 +91,7 @@ header h1 {
   transform: scale(1.2);
 }
 
-.footer{
+.footer {
   text-align: center;
   padding: 2rem;
   background-color: var(--gris-claro);
@@ -551,10 +551,11 @@ input[type="text"] {
   .contenido-gasto img {
     width: 40px;
     height: 40px;
-  }
+  } 
 
   .cantidad-gasto {
-    margin-top: 0rem;
+    margin-top: -2rem;
+    margin-bottom: 1rem;
     font-size: 2.6rem;
     font-weight: bold;
     align-self: center;
