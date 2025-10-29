@@ -1,9 +1,15 @@
-// cspell: ignore categoria firestore Almacen Limpieza Cuidado Carniceria Condimentos
+// cspell: ignore categoria firestore Almacen Limpieza Cuidado Carniceria Condimentos Notiflix notiflix prod sug proditem proditemnombre proditemseleccionado proditemsugeridos proditemsugeridosspan proditemsugeridosspanlinethrough agregarproducto nuevocategoria nuevonombre prodsugeridos marcarproductos Reintentá Sacalo manualmente
 
 import { useState, useEffect } from "react";
 import productosData from "../helpers/prodSug.json";
 import "../styles/ProdSugeridos.css";
-import { collection, getDocs, doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../helpers/firebase";
 import { toast } from "react-toastify";
 import Notiflix from "notiflix";
@@ -67,60 +73,6 @@ const ProdSugeridos = () => {
     cargarSeleccionados();
   }, []);
 
-const toggleSeleccionado = (nombre: string) => {
-  const producto = productos.find((p) => p.nombre === nombre);
-
-  if (producto && !producto.seleccionado) {
-    toast.info(
-      "✅No olvides hacer clic en 'Marcar Productos' para guardar.",
-      {
-        position: "bottom-center",
-        autoClose: 1000,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        style: {
-          fontSize: "3rem",
-        },
-      }
-    );
-  }
-
-  setProductos((prev) =>
-    prev.map((prod) =>
-      prod.nombre === nombre
-        ? { ...prod, seleccionado: !prod.seleccionado }
-        : prod
-    )
-  );
-};
-
-
-  const guardarSeleccionados = async () => {
-    const seleccionados = productos.filter((p) => p.seleccionado);
-
-    if (seleccionados.length === 0) {
-      toast.warn("No hay productos seleccionados para guardar.");
-      return;
-    }
-    Notiflix.Loading.circle("Guardando productos...");
-    try {
-      for (const prod of seleccionados) {
-        await setDoc(doc(db, "sugeridos", prod.nombre), {
-          nombre: prod.nombre,
-          categoria: prod.categoria,
-          seleccionado: true,
-        });
-      }
-      toast.success("Productos guardados en Firebase.");
-    } catch (error) {
-      toast.error("Error al guardar productos.");
-      console.error("Error guardarSeleccionados:", error);
-    } finally {
-      Notiflix.Loading.remove();
-    }
-  };
-
   const agregarProducto = async () => {
     const nombreTrimmed = nuevoNombre.trim();
 
@@ -162,6 +114,48 @@ const toggleSeleccionado = (nombre: string) => {
     return acc;
   }, {} as Record<string, ProductoMarcado[]>);
 
+  const toggleProducto = async (
+    nombre: string,
+    categoria: string,
+    checked: boolean
+  ) => {
+    setProductos((prev) =>
+      prev.map((p) =>
+        p.nombre === nombre ? { ...p, seleccionado: checked } : p
+      )
+    );
+
+    const ref = doc(db, "sugeridos", nombre);
+
+    try {
+      if (checked) {
+        await setDoc(
+          ref,
+          {
+            nombre,
+            categoria,
+            seleccionado: true,
+            updatedAt: serverTimestamp(),
+          },
+          { merge: true }
+        );
+        toast.success(`"${nombre}" marcado y guardado`);
+      } else {
+        toast.info(
+          "Este listado no permite destildar. Hacelo desde la otra pantalla."
+        );
+      }
+    } catch (err) {
+      setProductos((prev) =>
+        prev.map((p) =>
+          p.nombre === nombre ? { ...p, seleccionado: !checked } : p
+        )
+      );
+      console.error("Error sincronizando Firestore:", err);
+      toast.error("No se pudo sincronizar el producto. Reintentá.");
+    }
+  };
+
   return (
     <div>
       <div className="agregar-producto">
@@ -185,9 +179,9 @@ const toggleSeleccionado = (nombre: string) => {
       </div>
       <hr />
       <br />
-      <div className="MarcarProductos">
+      {/* <div className="MarcarProductos">
         <button onClick={guardarSeleccionados}>Marcar productos</button>
-      </div>
+      </div> */}
       {/* Listado de productos por categoría */}
       <div className="prod-sugeridos">
         {ordenDeseado.map((categoria) => {
@@ -203,7 +197,13 @@ const toggleSeleccionado = (nombre: string) => {
                       type="checkbox"
                       checked={prod.seleccionado}
                       disabled={prod.seleccionado}
-                      onChange={() => toggleSeleccionado(prod.nombre)}
+                      onChange={(e) =>
+                        toggleProducto(
+                          prod.nombre,
+                          prod.categoria,
+                          e.target.checked
+                        )
+                      }
                     />
                     <span
                       style={{

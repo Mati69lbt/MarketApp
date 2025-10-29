@@ -67,6 +67,30 @@
   transform: scale(0.97);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+.borrar-todos {
+  background-color: #ff0707ff;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  margin-top: 1rem;
+  margin-left: 2rem;
+}
+
+.borrar-todos button:hover {
+  background-color: #871812ff;
+  transform: scale(1.05);
+}
+
+.borrar-todos button:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 
 .categorias-grid {
   display: flex;

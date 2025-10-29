@@ -1,4 +1,4 @@
-// cspell: ignore categoria firestore
+// cspell: ignore categoria firestore Notiflix Almacen Carniceria categorias notiflix
 import { useEffect, useState } from "react";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../helpers/firebase";
@@ -84,6 +84,50 @@ const ListaCompras = () => {
     );
   };
 
+  const borrarTodosMarcados = () => {
+    if (seleccionados.length === 0) {
+      toast.info("No hay productos marcados para borrar");
+      return;
+    }
+
+    Notiflix.Confirm.show(
+      "¿Borrar todos?",
+      `Se eliminarán ${seleccionados.length} productos marcados. ¿Continuar?`,
+      "Borrar",
+      "Cancelar",
+      async () => {
+        Notiflix.Loading.circle("Eliminando marcados...");
+
+        try {
+          const nombres = seleccionados.map((p) => p.nombre);
+
+          // Borra cada documento directamente (sin batch)
+          await Promise.all(
+            nombres.map((nombre) => deleteDoc(doc(db, "sugeridos", nombre)))
+          );
+
+          setSeleccionados([]);
+          toast.success("Se borraron todos los artículos marcados");
+        } catch (error) {
+          console.error("Error al borrar todos:", error);
+          toast.error("No se pudieron borrar todos los artículos");
+          // Recupero listado por si quedó inconsistente
+          await obtenerProductos();
+        } finally {
+          Notiflix.Loading.remove();
+        }
+      },
+      () => {
+        // Cancelado: no hacemos nada
+      },
+      {
+        titleColor: "#d32f2f",
+        okButtonBackground: "#d32f2f",
+        cancelButtonBackground: "#ccc",
+      }
+    );
+  };
+
   const productosPorCategoria = seleccionados.reduce((acc, prod) => {
     if (!acc[prod.categoria]) acc[prod.categoria] = [];
     acc[prod.categoria].push(prod);
@@ -95,6 +139,18 @@ const ListaCompras = () => {
       <h1>Lista de Compras</h1>
       <button className="actualizar" onClick={obtenerProductos}>
         Actualizar Lista
+      </button>
+      <button
+        className="borrar-todos"
+        onClick={borrarTodosMarcados}
+        disabled={seleccionados.length === 0 || false}
+        title={
+          seleccionados.length === 0
+            ? "No hay productos marcados"
+            : "Borrar todos los marcados"
+        }
+      >
+        Borrar marcados
       </button>
       {seleccionados.length === 0 ? (
         <span className="sin-productos">No hay productos seleccionados</span>
