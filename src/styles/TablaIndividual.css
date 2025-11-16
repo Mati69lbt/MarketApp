@@ -1,0 +1,121 @@
+/* Contenedor */
+.tabla-ind {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+}
+.tabla-ind__title {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  text-align: center;
+  font-size: 3rem;
+}
+/* Scroll horizontal en mobile */
+.tabla-ind__scroller {
+  overflow-x: auto;
+}
+/* Tabla */
+.tabla-ind__table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.tabla-ind__thead {
+  background: #e0ffff;
+}
+.tabla-ind__th,
+.tabla-ind__td {
+  padding: 8px;
+  border-bottom: 1px solid #f1f1f1;
+  text-align: left;
+}
+.tabla-ind__th--right,
+.tabla-ind__td--right {
+  width: 120px; /* antes no tenía ancho fijo */
+  text-align: right;
+  white-space: nowrap;
+}
+.tabla-ind__th--idx,
+.tabla-ind__td--idx {
+  width: 30px;
+  text-align: center;
+  /* background: red; */
+  color: #666;
+}
+.tabla-ind__tr:hover .tabla-ind__td {
+  background: #fcfcfc;
+}
+.tabla-ind__empty {
+  text-align: center;
+  color: #999;
+  padding: 16px;
+}
+
+/* Total */
+.tabla-ind__tr-total .tabla-ind__td,
+.tabla-ind__td-total {
+  font-weight: 600;
+  border-bottom: none;
+}
+.tabla-ind__td-total-label {
+  color: #333;
+}
+
+/* Anchos controlados por columna */
+.tabla-ind__th--fecha,
+.tabla-ind__td--fecha {
+  width: 65px; /* "2 Ene" etc. */
+  white-space: nowrap;
+}
+
+.tabla-ind__th--desc {
+  /* solo header para que table-layout fije proporción */
+  width: 50%;
+}
+
+/* Descripción compacta (2 líneas con elipsis) */
+.tabla-ind__td--desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  line-height: 1.25;
+}
+
+.tabla-ind__tr-total {
+  background: #f8f8f8;
+}
+.tabla-ind__td-total-label {
+  text-align: right; /* alinea el label del total a la derecha */
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  color: #444;
+}
+
+@media (max-width: 600px) {
+  .tabla-ind__th--right,
+  .tabla-ind__td--right {
+    width: 96px;
+  } /* monto más chico aún */
+  .tabla-ind__th--fecha,
+  .tabla-ind__td--fecha {
+    width: 60px;
+  } /* fecha más chica */
+  .tabla-ind__th--desc,
+  .tabla-ind__td--desc {
+    width: auto;
+  } /* deja que la desc. use el resto */
+  .tabla-ind__td {
+    padding: 6px 8px;
+  } /* un toque más compacto */
+  .tabla-ind__scroller {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 7) Hover un poquito más visible (sin “zebras” de color permanente) */
+.tabla-ind__tr:hover .tabla-ind__td {
+  background: #f3f5f7;
+}

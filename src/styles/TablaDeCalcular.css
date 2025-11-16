@@ -1,0 +1,248 @@
+/* ====== LAYOUT: 3 cartas (Concepto | Porcentajes | Promedio diario) ====== */
+.cards-in-file {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Desktop: 3 columnas horizontales, misma altura */
+@media (min-width: 992px) {
+  .cards-in-file {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch; /* misma altura entre las tres */
+    gap: 16px;
+    width: 100%;
+  }
+  .calc-card {
+    flex: 0 1 auto;
+    width: 360px;
+    height: 100%;
+  }
+  .calc-side {
+    flex: 0 1 auto;
+    width: 250px;
+    height: 100%;
+  }
+  .bars-amount {
+    flex: 0 1 auto;
+    width: 250px;
+    height: 100%;
+  }
+}
+
+/* ====== CARD BASES ====== */
+.calc-card,
+.calc-side,
+.bars-amount {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ====== TABLA IZQUIERDA (Concepto / Monto) ====== */
+.calc-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.calc-th,
+.calc-td {
+  padding: 8px;
+  border-bottom: 1px solid #f1f1f1;
+  text-align: left;
+}
+.calc-th--monto,
+.calc-td--monto {
+  text-align: right;
+  width: 120px; /* <- 100px si la querés más compacta */
+  white-space: nowrap;
+}
+.calc-th--label,
+.calc-td--label {
+  width: auto;
+}
+.calc-total .calc-td {
+  background: #f8f8f8;
+  font-weight: 700;
+  border-bottom: none;
+}
+.calc-td--monto.neg {
+  color: #e11d48;
+} /* rojo */
+.calc-td--monto.pos {
+  color: #059669;
+} /* verde */
+
+/* ====== PANEL DERECHO – HEADER (Periodo + chips $/día) ====== */
+.calc-header {
+  display: grid;
+  grid-template-columns: 1fr; /* mobile: apilado */
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+@media (min-width: 992px) {
+  .calc-header {
+    grid-template-columns: auto 1fr; /* periodo izq, chips der */
+    column-gap: 12px;
+  }
+}
+.calc-period {
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+.daily-inline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* mobile */
+  gap: 6px;
+}
+@media (min-width: 992px) {
+  .daily-inline {
+    justify-content: flex-end;
+  } /* desktop */
+}
+
+/* Chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: #f6f8fa;
+  border: 1px solid #eef1f4;
+  line-height: 1;
+  white-space: nowrap;
+  font-size: 0.92rem;
+}
+.chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.chip--amb {
+  background: #8b5cf6;
+} /* violeta “ambos” en el dot */
+.chip--caro {
+  background: #3b82f6;
+} /* celeste Carolina */
+.chip--mati {
+  background: #34d399;
+} /* verde Matías */
+.chip-label {
+  color: #333;
+  font-weight: 600;
+}
+.chip-value {
+  color: #111;
+  font-weight: 700;
+}
+.chip-unit {
+  color: #666;
+  margin-left: 2px;
+  font-weight: 500;
+}
+
+/* ====== PANEL DERECHO – BARRAS % (Carolina / Matías) ====== */
+.bars {
+  display: grid;
+  gap: 8px; /* compacto entre barras */
+}
+.bar {
+  display: grid;
+  gap: 2px; /* acercar título/valor a la barra */
+}
+.bar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 1.5rem;
+}
+.bar-name {
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.bar-value {
+  font-weight: 700;
+}
+
+/* Altura única para todas las barras */
+.calc-side {
+  --bar-h: 18px;
+}
+@media (min-width: 992px) {
+  .calc-side {
+    --bar-h: 20px;
+  }
+}
+
+.bar-bg {
+  width: 100%;
+  height: var(--bar-h);
+  border-radius: 999px;
+  background: #eaf2ef;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  transform: translateZ(0);
+}
+
+/* Colores de relleno (coinciden con badges) */
+.bar-fill--caro {
+  background: #3b82f6;
+} /* Carolina */
+.bar-fill--mati {
+  background: #34d399;
+} /* Matías */
+
+/* ====== PROMEDIO DIARIO ($/día) – CARD TERCERA ====== */
+.bars-amount {
+  gap: 12px;
+
+  --bar-h: 18px;
+}
+.bars-title {
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+.bar-bg--amount {
+  background: #edf1f5;
+} /* fondo distinto al de % */
+
+.bar-fill--amb {
+  background: #8b5cf6;
+}
+
+/* ====== BADGE BASE (si no lo tenés en otra hoja) ====== */
+.badge {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.badge--caro {
+  background: #3b82f6;
+}
+.badge--mati {
+  background: #34d399;
+}
+.badge--amb {
+  background: #8b5cf6;
+}

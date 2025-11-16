@@ -12,6 +12,7 @@ import { auth } from "../helpers/firebase";
 import { toast } from "react-toastify";
 import { NavLink } from "react-router-dom";
 
+
 const MainLayout = () => {
   const [usuario, setUsuario] = useState<User | null>(null);
 
@@ -89,6 +90,13 @@ const MainLayout = () => {
             className={({ isActive }) => (isActive ? "activo" : "")}
           >
             Compras
+          </NavLink>
+          <NavLink
+            to="/gastos-mensuales"
+            onClick={cerrarMenu}
+            className={({ isActive }) => (isActive ? "activo" : "")}
+          >
+            Gastos Mensuales
           </NavLink>
           {usuario ? (
             <button className="logOut" onClick={handleLogout}>

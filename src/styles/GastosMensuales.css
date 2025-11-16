@@ -1,0 +1,26 @@
+/* grid y espacios a los lados */
+.tablas-mes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 0 16px; /* espacio lateral en desktop y mobile */
+}
+
+@media (min-width: 992px) {
+  .tablas-mes-grid {
+    grid-template-columns: repeat(
+      2,
+      minmax(420px, 520px)
+    ); /* dos columnas más finas */
+    justify-content: center; /* deja espacio a izquierda y derecha */
+    column-gap: 24px; /* espacio entre tablas */
+  }
+  .tablas-mes-grid > .tabla-ind {
+    margin: 0 auto; /* centra cada tarjeta dentro de su columna */
+  }
+}
+
+.tablas-mes-grid--calc{
+  grid-template-columns: 1fr;  /* un solo hijo, ocupa el ancho del contenedor */
+  margin-top: 16px;            /* separa de las tablas superiores */
+}
