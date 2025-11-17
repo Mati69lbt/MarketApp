@@ -9,16 +9,15 @@ export interface FilaGasto {
   descripcion: string;
   monto: number; // valor crudo, no string
 }
-/** Props del componente */
+
 interface TablaIndividualProps {
-  titulo: string; // ej: "Carolina" | "Matías"
-  rows: FilaGasto[]; // filas a mostrar (solo lectura)
-  /** Texto a mostrar en la fila de total (ej: "Total Carolina") */
+  titulo: string;
+  rows: FilaGasto[];
   labelTotal?: string;
-  /** Si querés ocultar/mostrar la col de índice (#) */
   showIndex?: boolean;
-  /** Clase extra para contenedor (opcional) */
   className?: string;
+  onEdit?: (row: FilaGasto) => void;
+  onDelete?: (row: FilaGasto) => void;
 }
 
 // Meses abreviados con mayúscula inicial y sin punto
@@ -57,6 +56,8 @@ const TablaIndividual = ({
   labelTotal,
   showIndex = true,
   className = "",
+  onEdit,
+  onDelete,
 }: TablaIndividualProps) => {
   const filasOrdenadas = useMemo(() => {
     return [...rows].sort((a, b) => a.fecha.localeCompare(b.fecha));
@@ -76,7 +77,9 @@ const TablaIndividual = ({
         <table className="tabla-ind__table">
           <thead className="tabla-ind__thead">
             <tr>
-              <th className="tabla-ind__th tabla-ind__th--idx">N°</th>
+              {showIndex && (
+                <th className="tabla-ind__th tabla-ind__th--idx">N°</th>
+              )}
               <th className="tabla-ind__th tabla-ind__th--fecha">Fecha</th>
               <th className="tabla-ind__th tabla-ind__th--desc">Descripción</th>
               <th className="tabla-ind__th tabla-ind__th--right">Monto</th>
@@ -102,7 +105,34 @@ const TablaIndividual = ({
                     className="tabla-ind__td tabla-ind__td--desc"
                     title={prettyDescripcion(g.descripcion)}
                   >
-                    {prettyDescripcion(g.descripcion)}
+                    {/* acciones + texto */}
+                    <div className="td-desc__wrap">
+                      {onEdit && (
+                        <button
+                          type="button"
+                          className="td-desc__btn td-desc__btn--edit"
+                          aria-label="Editar"
+                          onClick={() => onEdit(g)}
+                          title="Editar"
+                        >
+                          ✏️
+                        </button>
+                      )}
+                      <span className="td-desc__text">
+                        {prettyDescripcion(g.descripcion)}
+                      </span>
+                      {onDelete && (
+                        <button
+                          type="button"
+                          className="td-desc__btn td-desc__btn--del"
+                          aria-label="Borrar"
+                          onClick={() => onDelete(g)}
+                          title="Borrar (próximamente)"
+                        >
+                          🗑️
+                        </button>
+                      )}
+                    </div>
                   </td>
                   <td className="tabla-ind__td tabla-ind__td--right">
                     <NumericFormat
