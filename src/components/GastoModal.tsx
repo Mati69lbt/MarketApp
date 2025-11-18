@@ -215,6 +215,7 @@ const GastoModal = ({
               thousandSeparator="."
               decimalSeparator=","
               allowNegative={false}
+              prefix="$   "
               decimalScale={2}
               fixedDecimalScale
               onValueChange={({ floatValue }) => setMonto(floatValue ?? 0)}

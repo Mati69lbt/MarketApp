@@ -113,7 +113,7 @@ const TablaIndividual = ({
                           className="td-desc__btn td-desc__btn--edit"
                           aria-label="Editar"
                           onClick={() => onEdit(g)}
-                          title="Editar"
+                          title="Editar Gasto"
                         >
                           ✏️
                         </button>
@@ -127,7 +127,7 @@ const TablaIndividual = ({
                           className="td-desc__btn td-desc__btn--del"
                           aria-label="Borrar"
                           onClick={() => onDelete(g)}
-                          title="Borrar (próximamente)"
+                          title="Borrar Gasto"
                         >
                           🗑️
                         </button>
