@@ -1,0 +1,146 @@
+.historial {
+  min-height: calc(100vh - 120px); /* ajustá si tenés navbar fija */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* centrado vertical */
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background: #f9fafb; /* gris clarito, sin azul */
+}
+
+/* Header: título + select */
+.historial-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 👈 centrado */
+  margin-bottom: 10px;
+  background: transparent; /* 👈 sin fondo azul */
+}
+
+/* Título más chico */
+.historial-head h1 {
+  font-size: clamp(2rem, 1.1rem + 0.4vw, 1.7rem);
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Contenedor del select + botón volver */
+.historial-filtros {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 👈 centrado */
+  gap: 20px;
+}
+
+/* Select más grande y cómodo */
+.historial-filtros select {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  font-size: 1.5rem; /* 👈 letra más grande */
+  color: #111827;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.historial-filtros select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+.historial-filtros select:hover {
+  background: #6366f1;
+  color: white;
+}
+
+.btn-volver {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  font-size: 1.5rem;
+  color: #111827;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn-volver:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+  box-shadow: 0 2px 6px rgba(148, 163, 184, 0.4);
+}
+
+/* Resumen como card centrada */
+.historial-resumen {
+  margin: 24px auto 0; /* 👈 auto para centrar */
+  padding: 16px 20px;
+  max-width: 360px;
+  border-radius: 14px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+}
+
+/* Título del resumen */
+.historial-resumen h2 {
+  margin: 0 0 5px;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Filas del resumen: label izquierda, valor derecha */
+.historial-resumen__fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin: 6px 0;
+  font-size: 1.5rem;
+  color: #374151;
+}
+
+.historial-resumen__fila span {
+  color: #6b7280;
+}
+
+.historial-resumen__fila strong {
+  font-weight: 600;
+  color: #111827;
+}
+
+.historial-resumen__saldo-mano {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.sinDatos,
+.conMes {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.sinHistorial,
+.conDatos {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Mobile tweaks */
+@media (max-width: 640px) {
+  .historial {
+    padding: 12px;
+  }
+
+  .historial-resumen {
+    margin: 20px 0 0;
+    max-width: 100%;
+  }
+}

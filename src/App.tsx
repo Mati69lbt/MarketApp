@@ -8,6 +8,7 @@ import MainLayout from "./layout/MainLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GastosMensuales from "./pages/GastosMensuales";
+import Historial from "./pages/Historial";
 
 const App = () => {
   return (
@@ -18,7 +19,8 @@ const App = () => {
           <Route path="/comparacion" element={<CompararTicket />} />
           <Route path="/productos" element={<ProdSugeridos />} />
           <Route path="/compras" element={<ListaCompras />} />
-          <Route path="/gastos-mensuales" element={<GastosMensuales/>} />
+          <Route path="/gastos-mensuales" element={<GastosMensuales />} />
+          <Route path="/historial" element={<Historial />} />
         </Route>
       </Routes>
       <ToastContainer position="bottom-center" autoClose={2000} />

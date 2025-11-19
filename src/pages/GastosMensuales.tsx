@@ -20,6 +20,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { db } from "../helpers/firebase";
+import { Link } from "react-router-dom";
 
 const GastosMensuales = () => {
   const [gastos_Matias, setGastos_Matias] = useState<GastoMensual[]>([]);
@@ -30,6 +31,16 @@ const GastosMensuales = () => {
 
   const [open, setOpen] = useState(false);
   const [editItem, setEditItem] = useState<Gasto | null>(null);
+
+  /* historial */
+
+  /************* Respaldo *************/
+  const [backup_Matias, setBackup_Matias] = useState<GastoMensual[]>([]);
+  const [backup_Carolina, setBackup_Carolina] = useState<GastoMensual[]>([]);
+  /************* fin *************/
+
+  console.log(backup_Matias);
+  console.log(backup_Carolina);
 
   useEffect(() => {
     const cargarGastos = async () => {
@@ -72,6 +83,11 @@ const GastosMensuales = () => {
 
         setGastos_Matias(gastosMatias);
         setGastos_Carolina(gastosCarolina);
+
+        /* borrar respaldo */
+        setBackup_Matias([...gastosMatias]);
+        setBackup_Carolina([...gastosCarolina]);
+        /* fin borrar respaldo */
       } catch (error) {
         console.error("Error al cargar gastos desde Firestore:", error);
         toast.error("Error al cargar los gastos");
@@ -264,15 +280,112 @@ const GastosMensuales = () => {
   const onDeleteCarolina = (row: FilaGasto) => borrarGasto(row, "Carolina");
   const onDeleteMatias = (row: FilaGasto) => borrarGasto(row, "Matías");
 
+  const cerrarMes = () => {
+    // si no hay nada, no tiene sentido cerrar
+    if (gM_ordenados.length === 0 && gC_ordenados.length === 0) {
+      toast.info("No hay gastos para cerrar.");
+      return;
+    }
+
+    Notiflix.Confirm.show(
+      "Cerrar mes",
+      `Vas a cerrar el mes "${mes || "actual"}".
+Los gastos pasarán al historial y se vaciarán las tablas.
+¿Continuar?`,
+      "Cerrar mes",
+      "Cancelar",
+      async () => {
+        Notiflix.Loading.circle("Cerrando mes...");
+
+        try {
+          // 1) combinación de todos los gastos actuales
+          const todos = [...gC_ordenados, ...gM_ordenados].sort((a, b) =>
+            a.fecha.localeCompare(b.fecha)
+          );
+
+          // periodoKey basado en la fecha del primer gasto
+          const first = todos[0];
+          const [anio, mesStr] = first.fecha.split("-"); // "YYYY-MM-DD"
+          const periodoKey = `${anio}-${mesStr}`; // ej: "2025-11"
+
+          // 2) cálculos de resumen (ya están calculados arriba en el estado)
+          const totalCarolina = total_Carolina;
+          const totalMatias = total_Matias;
+          const totalGeneral = Number((totalCarolina + totalMatias).toFixed(2));
+          const costoCadaUno = Number((totalGeneral / 2).toFixed(2));
+          const diferenciaCarolina = Number(
+            (totalCarolina - costoCadaUno).toFixed(2)
+          );
+          const diferenciaMatias = Number(
+            (totalMatias - costoCadaUno).toFixed(2)
+          );
+
+          // 3) documento completo que va al historial
+          const historialDoc = {
+            periodoKey,
+            periodoLabel: mes,
+            fechaCierre: new Date().toISOString(),
+
+            // 🔹 detalle completo para reutilizar TablaIndividual
+            gastosCarolina: gC_ordenados,
+            gastosMatias: gM_ordenados,
+
+            // 🔹 resumen ya calculado (no se vuelve a calcular en Historial)
+            totalCarolina,
+            totalMatias,
+            totalGeneral,
+            costoCadaUno,
+            diferenciaCarolina,
+            diferenciaMatias,
+          };
+
+          // 4) guardar en historial (1 doc por mes)
+          await setDoc(
+            doc(db, "historialGastosMensuales", periodoKey),
+            historialDoc
+          );
+
+          // 5) borrar todos los gastos actuales de la colección gastosMensuales
+          const idsAEliminar = todos.map((g) => g.id);
+          for (const id of idsAEliminar) {
+            await deleteDoc(doc(db, "gastosMensuales", id));
+          }
+
+          // 6) limpiar estado local
+          setGastos_Carolina([]);
+          setGastos_Matias([]);
+          setTotal_Carolina(0);
+          setTotal_Matias(0);
+          setMes("");
+
+          toast.success("Mes cerrado y guardado en historial.");
+        } catch (error) {
+          console.error("Error al cerrar mes:", error);
+          toast.error("Error al cerrar el mes");
+        } finally {
+          Notiflix.Loading.remove();
+        }
+      },
+      () => {
+        // cancelar
+      }
+    );
+  };
+
   return (
     <div>
       <section className="head">
         <h1>Gastos Mensuales</h1>
         <div className="btn-head">
           <button className="gm-btn gm-btn--primary" onClick={abrirCrear}>
-            Agregar gasto
+            Agregar Gasto
           </button>
-          <button className="gm-btn gm-btn--secondary">Cerrar Mes</button>
+          <Link to="/historial">
+            <button className="gm-btn gm-btn--ter">Historial</button>
+          </Link>
+          <button className="gm-btn gm-btn--secondary" onClick={cerrarMes}>
+            Cerrar Mes
+          </button>
         </div>
       </section>
 

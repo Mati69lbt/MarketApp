@@ -20,9 +20,9 @@
   }
 }
 
-.tablas-mes-grid--calc{
-  grid-template-columns: 1fr;  /* un solo hijo, ocupa el ancho del contenedor */
-  margin-top: 16px;            /* separa de las tablas superiores */
+.tablas-mes-grid--calc {
+  grid-template-columns: 1fr; /* un solo hijo, ocupa el ancho del contenedor */
+  margin-top: 16px; /* separa de las tablas superiores */
 }
 
 .head {
@@ -55,13 +55,24 @@
 
 /* variante secundaria del botón */
 .gm-btn--secondary {
-  background: #e5e7eb;
+  background: #f00d7fff;
   color: #111827;
   border: 1px solid #d1d5db;
 }
 
 .gm-btn--secondary:hover {
-  background: #d4d4d8;
+  background: black;
+  color: white;
+}
+
+.gm-btn--ter {
+  background: #e0e7ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+}
+
+.gm-btn--ter:hover {
+  background: #c7d2fe;
 }
 
 /* responsive: header en columna y botones abajo del título */
@@ -73,11 +84,14 @@
 
   .btn-head {
     width: 100%;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    flex-direction: column; /* 👈 los pone uno debajo del otro */
+    align-items: stretch; /* 👈 que ocupen todo el ancho */
+    gap: 8px; /* 👈 un poco menos de espacio entre ellos */
+    margin-left: 0; /* 👈 ya no hace falta empujarlos a la derecha */
   }
 
   .btn-head .gm-btn {
-    flex: 0 0 auto;
+    width: 100%; /* 👈 botón full width */
+    justify-content: center; /* por si adentro usás flex */
   }
 }

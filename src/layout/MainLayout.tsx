@@ -11,7 +11,7 @@ import "./MainLayout.css";
 import { auth } from "../helpers/firebase";
 import { toast } from "react-toastify";
 import { NavLink } from "react-router-dom";
-
+import Historial from "../pages/Historial";
 
 const MainLayout = () => {
   const [usuario, setUsuario] = useState<User | null>(null);
@@ -97,6 +97,13 @@ const MainLayout = () => {
             className={({ isActive }) => (isActive ? "activo" : "")}
           >
             Gastos Mensuales
+          </NavLink>
+          <NavLink
+            to="/historial"
+            onClick={cerrarMenu}
+            className={({ isActive }) => (isActive ? "activo" : "")}
+          >
+            Historial
           </NavLink>
           {usuario ? (
             <button className="logOut" onClick={handleLogout}>
