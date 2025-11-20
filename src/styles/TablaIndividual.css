@@ -72,6 +72,7 @@
 .tabla-ind__th--desc {
   /* solo header para que table-layout fije proporción */
   width: 50%;
+  text-align: center;
 }
 
 /* Descripción compacta (2 líneas con elipsis) */
@@ -121,36 +122,44 @@
 }
 
 /* contenedor flexible para iconos + texto */
-.td-desc__wrap{
-  display:flex;
-  align-items:center;
-  gap:8px;
+.td-desc__wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* texto con dos líneas máx (tu estilo existente de desc se mantiene) */
-.td-desc__text{
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-  word-break:break-word;
-  line-height:1.25;
-  flex:1 1 auto; /* que el texto use el espacio disponible */
+.td-desc__text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  line-height: 1.25;
+  flex: 1 1 auto; /* que el texto use el espacio disponible */
 }
 
 /* botoncitos emoji */
-.td-desc__btn{
-  appearance:none;
-  border:0;
-  background:transparent;
-  cursor:pointer;
-  line-height:1;
-  font-size:16px;
-  opacity:.9;
-  padding:0 2px;
+.td-desc__btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  line-height: 1;
+  font-size: 16px;
+  opacity: 0.9;
+  padding: 0 2px;
 }
-.td-desc__btn:hover{ opacity:1; transform:translateY(-0.5px); }
-.td-desc__btn:active{ transform:translateY(0); }
+.td-desc__btn:hover {
+  opacity: 1;
+  transform: translateY(-0.5px);
+}
+.td-desc__btn:active {
+  transform: translateY(0);
+}
 
-.td-desc__btn--edit{ /* opcional: coloriza el emoji via filter si usás SVG; aquí lo dejamos simple */ }
-.td-desc__btn--del{  }
+.td-desc__btn--edit {
+  /* opcional: coloriza el emoji via filter si usás SVG; aquí lo dejamos simple */
+}
+.td-desc__btn--del {
+}

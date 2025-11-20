@@ -70,16 +70,15 @@ const Historial = () => {
             diferenciaMatias: data.diferenciaMatias ?? 0,
           });
         });
-        console.log(lista);
 
         // ordeno por periodoKey
-        lista.sort((a, b) => a.periodoKey.localeCompare(b.periodoKey));
+        lista.sort((a, b) => b.periodoKey.localeCompare(a.periodoKey));
 
         setHistorialMeses(lista);
 
         // si no hay uno seleccionado, uso el último (mes más nuevo)
         if (lista.length > 0) {
-          setMesSeleccionado(lista[lista.length - 1].id);
+          setMesSeleccionado(lista[0].id);
         }
       } catch (error) {
         console.error("Error al cargar historial:", error);
