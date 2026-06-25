@@ -1,5 +1,5 @@
 // cspell: ignore historialMensuales Matias Matías Notiflix Seleccioná firestore notiflix
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TablaIndividual from "../components/TablaIndividual";
 import Notiflix from "notiflix";
 import { toast } from "react-toastify";

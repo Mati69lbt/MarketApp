@@ -1,5 +1,5 @@
 //cspell:ignore FilaGasto descripcion
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { NumericFormat } from "react-number-format";
 import "../styles/TablaIndividual.css";
 
@@ -35,7 +35,7 @@ const prettyDescripcion = (s: string) => {
   return t ? t[0].toUpperCase() + t.slice(1) : "";
 };
 
-const TablaIndividual = ({
+const TablaVeto = ({
   titulo,
   rows,
   labelTotal,
@@ -156,4 +156,4 @@ const TablaIndividual = ({
   );
 };
 
-export default TablaIndividual;
+export default TablaVeto;

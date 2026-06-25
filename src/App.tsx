@@ -9,6 +9,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GastosMensuales from "./pages/GastosMensuales";
 import Historial from "./pages/Historial";
+import Vencimientos from "./pages/Vencimientos";
+
 
 const App = () => {
   return (
@@ -21,6 +23,7 @@ const App = () => {
           <Route path="/compras" element={<ListaCompras />} />
           <Route path="/gastos-mensuales" element={<GastosMensuales />} />
           <Route path="/historial" element={<Historial />} />
+          <Route path="/Vencimientos" element={<Vencimientos />} />
         </Route>
       </Routes>
       <ToastContainer position="bottom-center" autoClose={2000} />

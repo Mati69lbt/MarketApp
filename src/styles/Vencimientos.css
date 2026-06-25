@@ -1,0 +1,43 @@
+/* ── CONTENEDOR GENERAL ── */
+.vencimientos-contenedor {
+  padding: 1.5rem;
+}
+
+/* ── BARRA DE NAVEGACIÓN ── */
+.vencimientos-nav {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.75rem;
+}
+
+.vencimientos-nav button {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid #e2e8f0;
+  background: none;
+  font-size: 3rem;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  transition: all 0.2s;
+}
+
+.vencimientos-nav button:hover {
+  background-color: #f1f5f9;
+  color: #111827;
+}
+
+.vencimientos-nav button.activo {
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+}
+
+/* ── TÍTULO DE SECCIÓN ── */
+.vencimientos-seccion h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}

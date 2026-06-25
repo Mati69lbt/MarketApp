@@ -1,18 +1,18 @@
 type Gasto = { fecha: string };
 
 const monthNames = [
-  "enero",
-  "febrero",
-  "marzo",
-  "abril",
-  "mayo",
-  "junio",
-  "julio",
-  "agosto",
-  "septiembre",
-  "octubre",
-  "noviembre",
-  "diciembre",
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
 ];
 
 const splitYMD = (s: string) => {
@@ -22,7 +22,7 @@ const splitYMD = (s: string) => {
 
 const mesActual = (
   gastos_Carolina: Gasto[] = [],
-  gastos_Matias: Gasto[] = []
+  gastos_Matias: Gasto[] = [],
 ) => {
   const todos: Gasto[] = [...gastos_Carolina, ...gastos_Matias];
 
@@ -32,20 +32,20 @@ const mesActual = (
     const m = now.getMonth() + 1;
     return {
       periodKey: `${y}-${String(m).padStart(2, "0")}`,
-      periodLabel: `${monthNames[m - 1]}-${y}`,
+      periodLabel: `${monthNames[m - 1]} - ${y}`,
     };
   }
 
   // ✅ reduce con tipo e inicial
   const max = todos.reduce<Gasto>(
     (a, b) => (a.fecha > b.fecha ? a : b),
-    todos[0]
+    todos[0],
   );
 
   const { y, m } = splitYMD(max.fecha);
   return {
     periodKey: `${y}-${String(m).padStart(2, "0")}`,
-    periodLabel: `${monthNames[m - 1]}-${y}`,
+    periodLabel: `${monthNames[m - 1]} - ${y}`,
   };
 };
 

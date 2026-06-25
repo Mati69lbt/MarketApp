@@ -65,7 +65,6 @@ const TablaDeCalcular: React.FC<Props> = ({
   carolina,
   matias,
   periodLabel,
-  className = "",
 }) => {
   // Totales
   const totalC = useMemo(
@@ -73,20 +72,20 @@ const TablaDeCalcular: React.FC<Props> = ({
       money2(
         carolina.reduce(
           (a, it) => a + (Number.isFinite(it.monto) ? it.monto : 0),
-          0
-        )
+          0,
+        ),
       ),
-    [carolina]
+    [carolina],
   );
   const totalM = useMemo(
     () =>
       money2(
         matias.reduce(
           (a, it) => a + (Number.isFinite(it.monto) ? it.monto : 0),
-          0
-        )
+          0,
+        ),
       ),
-    [matias]
+    [matias],
   );
 
   const subtotal = money2(totalC + totalM);
@@ -137,15 +136,15 @@ const TablaDeCalcular: React.FC<Props> = ({
   // Promedios diarios ($/día)
   const promDiarioTotal = useMemo(
     () => Math.round((subtotal / diasDelMes) * 100) / 100,
-    [subtotal, diasDelMes]
+    [subtotal, diasDelMes],
   );
   const promDiarioC = useMemo(
     () => Math.round((totalC / diasDelMes) * 100) / 100,
-    [totalC, diasDelMes]
+    [totalC, diasDelMes],
   );
   const promDiarioM = useMemo(
     () => Math.round((totalM / diasDelMes) * 100) / 100,
-    [totalM, diasDelMes]
+    [totalM, diasDelMes],
   );
 
   // Para las barras de dinero, normalizamos contra el mayor de los tres
@@ -230,7 +229,7 @@ const TablaDeCalcular: React.FC<Props> = ({
                   fixedDecimalScale
                 />
               </td>
-            </tr>        
+            </tr>
           </tbody>
         </table>
       </div>

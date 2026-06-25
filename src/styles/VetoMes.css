@@ -1,0 +1,281 @@
+/* ── CONTENEDOR GENERAL ── */
+.vetoMes-contenedor {
+  padding: 1rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ── LAYOUT TRES COLUMNAS ── */
+.vetoMes-layout {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ── FORMULARIO ── */
+.vetoMes-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 200px;
+}
+
+.vetoMes-form input[type="date"],
+.vetoMes-form input[type="text"],
+.vetoMes-form input[type="number"] {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: right;
+}
+
+.vetoMes-form button[type="submit"] {
+  padding: 0.5rem 1.25rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  align-self: center;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.vetoMes-form button[type="submit"]:hover {
+  background-color: #1d4ed8;
+}
+
+/* ── CELDA FECHA ── */
+.fecha-celda {
+  display: grid;
+  grid-template-columns: 0.1fr auto 0.1fr;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 220px;
+}
+
+.fecha-dia-semana {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: left;
+}
+
+.fecha-dia-numero {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #4f46e5;
+  background-color: #eef2ff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.fecha-mes-nombre {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #374151;
+  text-align: right;
+}
+
+/* ── TABLA ── */
+.vetoMes-tabla {
+  border-collapse: collapse;
+  font-size: 1.5rem;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.vetoMes-tabla th,
+.vetoMes-tabla td {
+  padding: 8px;
+  border-bottom: 1px solid #f1f1f1;
+  text-align: left;
+}
+
+.vetoMes-tabla thead {
+  background-color: #e0ffff;
+}
+
+.vetoMes-tabla th {
+  font-weight: 600;
+  color: #374151;
+}
+
+.vetoMes-tabla tbody tr:hover td {
+  background-color: #f3f5f7;
+}
+
+/* columna índice */
+.vetoMes-tabla .col-idx {
+  width: 30px;
+  text-align: center;
+  color: #666;
+}
+
+/* columna fecha */
+.vetoMes-tabla .col-fecha {
+  width: 160px;
+  white-space: nowrap;
+}
+
+/* columna descripción */
+.vetoMes-tabla .col-desc {
+  width: 50%;
+  word-break: break-word;
+}
+
+/* columna monto */
+.vetoMes-tabla .col-monto {
+  width: 120px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* columna pagado y sumar */
+.vetoMes-tabla .col-check {
+  width: 60px;
+  text-align: center;
+}
+
+/* columna eliminar */
+.vetoMes-tabla .col-accion {
+  width: 40px;
+  text-align: center;
+}
+
+.btn-eliminar:hover {
+  background-color: #fee2e2;
+}
+
+/* ── SUBTOTALES ── */
+.vetoMes-subtotales {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 160px;
+  align-self: start;
+  justify-self: start;
+}
+
+.subtotales-titulo {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  margin: 0 0 0.25rem 0;
+}
+
+.subtotal-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  background-color: #f1f5f9;
+}
+
+.subtotal-item span {
+  font-size: 1.8rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.subtotal-item strong {
+  font-size: 1.8rem;
+  color: #111827;
+}
+
+.subtotal-item.pagado {
+  background-color: #f0fdf4;
+}
+
+.subtotal-item.pagado strong {
+  color: #166534;
+}
+
+.subtotal-item.pendiente {
+  background-color: #fff7ed;
+}
+
+.subtotal-item.pendiente strong {
+  color: #9a3412;
+}
+
+.subtotal-item.seleccionado {
+  background-color: #eff6ff;
+  border: 1px solid #93c5fd;
+}
+
+.subtotal-item.seleccionado strong {
+  color: #1d4ed8;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 480px) {
+  .vetoMes-form {
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  .vetoMes-form input[type="date"],
+  .vetoMes-form input[type="text"],
+  .vetoMes-form input[type="number"] {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .vetoMes-tabla th,
+  .vetoMes-tabla td {
+    white-space: normal;
+    font-size: 1.2rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .fecha-celda {
+    grid-template-columns: 0.5fr 0.5fr 0.5fr;
+    gap: 0.1rem;
+    max-width: 100%;
+  }
+
+  .fecha-dia-semana,
+  .fecha-dia-numero,
+  .fecha-mes-nombre {
+    font-size: 1rem;
+  }
+
+  .vetoMes-layout {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .vetoMes-tabla-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .vetoMes-tabla {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .vetoMes-subtotales {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .subtotal-item {
+    flex: 1;
+    min-width: 130px;
+  }
+}

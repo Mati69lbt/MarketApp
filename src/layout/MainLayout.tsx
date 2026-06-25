@@ -114,6 +114,13 @@ const MainLayout = () => {
               Log In
             </button>
           )}
+          <NavLink
+            to="/vencimientos"
+            onClick={cerrarMenu}
+            className={({ isActive }) => (isActive ? "activo" : "")}
+          >
+            Vencimientos
+          </NavLink>
         </div>
       </nav>
 

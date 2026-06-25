@@ -391,14 +391,14 @@ Los gastos pasarán al historial y se vaciarán las tablas.
 
       <div className="tablas-mes-grid">
         <TablaIndividual
-          titulo="Carolina"
+          titulo={`Carolina: ${mes}`}
           rows={gC_ordenados}
           labelTotal="Total"
           onEdit={onEditCarolina}
           onDelete={onDeleteCarolina}
         />
         <TablaIndividual
-          titulo="Matías"
+          titulo={`Matías: ${mes}`}
           rows={gM_ordenados}
           labelTotal="Total"
           onEdit={onEditMatias}
