@@ -31,3 +31,5 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LOGINMARKETAPP }}
           channelId: live
           projectId: loginmarketapp
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
