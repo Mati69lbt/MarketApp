@@ -1,8 +1,8 @@
 /* grid y espacios a los lados */
 .tablas-mes-grid {
-  display: grid;
+  display: flex;
   gap: 16px;
-  padding: 0 16px; /* espacio lateral en desktop y mobile */
+  padding: 0 16px;
 }
 
 @media (min-width: 992px) {

@@ -1,5 +1,5 @@
 /* grid y espacios a los lados */
-.tablas-mes-grid {
+.tablas-mes-grid_vetos {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;

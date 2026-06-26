@@ -7,8 +7,7 @@ import { db } from "../helpers/firebase";
 import { NumericFormat } from "react-number-format";
 import TablaVeto from "../components/TablaVeto";
 import type { FilaGasto } from "../components/TablaVeto";
-import "../styles/Historial.css";
-
+import "../styles/VetoHisto.css";
 
 type HistorialMes = {
   id: string;
@@ -61,6 +60,8 @@ const VetoHisto = ({ setView }: Props) => {
         lista.sort((a, b) => b.periodoKey.localeCompare(a.periodoKey));
         setHistorialMeses(lista);
 
+
+
         if (lista.length > 0) {
           setMesSeleccionado(lista[0].id);
         }
@@ -96,57 +97,26 @@ const VetoHisto = ({ setView }: Props) => {
     );
   }
 
-  const { periodoKey, periodoLabel, vetos, totalVencimientos } = mesActual;
-  const periodoFormateado = formatearPeriodo(periodoLabel, periodoKey);
-
   return (
-    <div className="historial">
-      <header className="historial-head">
+    <div className="historial-veto">
+      <header className="historial-head-veto">
         <h2>Historial de Vencimientos</h2>
-        <div className="historial-filtros">
-          <select
-            value={mesSeleccionado}
-            onChange={(e) => setMesSeleccionado(e.target.value)}
-          >
-            {historialMeses.map((h) => (
-              <option key={h.id} value={h.id}>
-                {formatearPeriodo(h.periodoLabel, h.periodoKey)}
-              </option>
-            ))}
-          </select>
-         
-            <button className="btn-volver" onClick={() => setView("mesActual")}>
-              Volver
-            </button>
-     
-        </div>
+        <button className="btn-volver" onClick={() => setView("mesActual")}>
+          Volver
+        </button>
       </header>
 
-      <div className="tablas-mes-grid">
-        <TablaVeto
-          titulo={periodoFormateado}
-          rows={vetos}
-          labelTotal="Total"
-          // sin onEdit ni onDelete: solo lectura
-        />
-      </div>
-
-      <section className="historial-resumen">
-        <p className="historial-resumen__fila">
-          <span>Total vencimientos</span>
-          <strong>
-            <NumericFormat
-              displayType="text"
-              thousandSeparator="."
-              decimalSeparator=","
-              prefix="$ "
-              value={totalVencimientos}
-              decimalScale={2}
-              fixedDecimalScale
+      <div className="vetohisto-grid">
+        {historialMeses.map((h) => (
+          <div key={h.id} className="vetohisto-card">
+            <TablaVeto
+              titulo={formatearPeriodo(h.periodoLabel, h.periodoKey)}
+              rows={h.vetos}
+              labelTotal="Total"
             />
-          </strong>
-        </p>
-      </section>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,11 +1,8 @@
 //cspell: ignore descripcion matias Matías mati pcts caro carolina amb anio dias
 import React, { useMemo } from "react";
 import { NumericFormat } from "react-number-format";
-import {
-  buildStyles,
-  CircularProgressbarWithChildren,
-} from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import "../styles/TablaDeCalcular.css";
 
 const mesesMap: Record<string, string> = {
   enero: "Enero",

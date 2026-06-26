@@ -6,7 +6,6 @@ import calcularGastos from "../helpers/g-m/utils/calcularGastos";
 import TablaIndividual from "../components/TablaIndividual";
 import "../styles/GastosMensuales.css";
 import TablaDeCalcular from "../components/TablaDeCalcular";
-import "../styles/TablaDeCalcular.css";
 import GastoModal from "../components/GastoModal";
 import type { Gasto, GastoInput } from "../components/GastoModal";
 import type { FilaGasto } from "../components/TablaIndividual";

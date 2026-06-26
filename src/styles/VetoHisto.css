@@ -1,0 +1,48 @@
+.vetohisto-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 0 8px;
+}
+
+.historial-veto {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px;
+    text-align: center;
+    background: #f9fafb;
+}
+
+.historial-head-veto {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center; /* 👈 centrado */
+  background: transparent; /* 👈 sin fondo azul */
+}
+
+.vetohisto-card {
+  flex: 1 1 300px; /* crece, se achica, mínimo 300px */
+  max-width: 420px; /* no se estira demasiado */
+}
+
+.vetohisto-card__total {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #f8f8f8;
+  border-radius: 0 0 8px 8px;
+  font-size: 0.9rem;
+  margin-top: -1px;
+}
+
+@media (max-width: 600px) {
+  .vetohisto-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
