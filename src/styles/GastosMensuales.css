@@ -7,10 +7,7 @@
 
 @media (min-width: 992px) {
   .tablas-mes-grid {
-    grid-template-columns: repeat(
-      2,
-      minmax(420px, 520px)
-    ); /* dos columnas más finas */
+    grid-template-columns: repeat(2, minmax(420px, 520px));
     justify-content: center; /* deja espacio a izquierda y derecha */
     column-gap: 24px; /* espacio entre tablas */
   }
