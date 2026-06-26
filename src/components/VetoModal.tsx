@@ -1,17 +1,21 @@
-//cspell: ignore fechaiso Swal Confirmás Descripcion Matías anio mes gm-modal gm-hint gm-periodo gm-input gm-field gm-radios gm-btn gm-close bloqueante descripcion sweetalert2
-import React, { useEffect, useMemo, useState } from "react";
+//cspell: ignore fechaiso Swal Confirmás Descripcion Matías anio mes gm-modal gm-hint gm-periodo gm-input gm-field gm-radios gm-btn gm-close bloqueante descripcion sweetalert2 Notiflix
+import { useEffect, useMemo, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import "../styles/GastoModal.css";
 import Swal from "sweetalert2";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../helpers/firebase";
+import Notiflix from "notiflix";
 
-export type Persona = "Carolina" | "Matías";
+export const invalidarCacheSugerencias = () => {
+  cacheSugerencias = null;
+};
 
 export interface Gasto {
   id: string;
   fecha: string; // "YYYY-MM-DD"
   descripcion: string;
   monto: number; // guardado como number
- 
 }
 
 export type GastoInput = Omit<Gasto, "id">;
@@ -57,6 +61,18 @@ function fechaEnPeriodo(fechaISO: string, periodoLabel?: string) {
   return d.getFullYear() === p.anio && d.getMonth() === p.mes;
 }
 
+let cacheSugerencias: string[] | null = null;
+
+const cargarSugerencias = async (): Promise<string[]> => {
+  if (cacheSugerencias) return cacheSugerencias;
+  const snap = await getDocs(collection(db, "sugerenciasVetos"));
+  cacheSugerencias = snap.docs
+    .map((d) => (d.data().descripcion as string) ?? "")
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b, "es"));
+  return cacheSugerencias;
+};
+
 const VetoModal = ({
   isOpen,
   mode,
@@ -75,6 +91,15 @@ const VetoModal = ({
     typeof initial?.monto === "number" ? initial!.monto : 0,
   );
 
+  const [sugerencias, setSugerencias] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Carga una vez al montar el componente (o cuando el módulo carga)
+    cargarSugerencias()
+      .then(setSugerencias)
+      .catch((e) => console.error("Error al cargar sugerencias:", e));
+  }, []);
+
   const disabled = !fecha || !descripcion.trim() || (monto ?? 0) <= 0;
 
   const fueraDePeriodo = useMemo(
@@ -89,13 +114,11 @@ const VetoModal = ({
       setFecha(initial.fecha ?? new Date().toISOString().slice(0, 10));
       setDescripcion(initial.descripcion ?? "");
       setMonto(typeof initial.monto === "number" ? initial.monto : 0);
-
     } else {
       // crear: limpio por defecto
       setFecha(new Date().toISOString().slice(0, 10));
       setDescripcion("");
       setMonto(0);
-   
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, mode, initial?.id]);
@@ -112,41 +135,31 @@ const VetoModal = ({
     setMonto(0);
   };
 
-  const handleSubmit = async () => {
-    // Confirmación linda (no bloqueante si se cancela)
-    const res = await Swal.fire({
-      title: cta,
-      text:
-        mode === "create"
-          ? "¿Confirmás guardar este gasto?"
-          : "¿Confirmás actualizar este gasto?",
-      showCancelButton: true,
-      confirmButtonText: cta,
-      cancelButtonText: "Cancelar",
-      icon: "question",
-      confirmButtonColor: "#2563eb",
-      cancelButtonColor: "#9ca3af",
-      focusCancel: true,
-      width: "40rem",
-      customClass: {
-        popup: "sw-modal-lg",
-        title: "sw-title-lg",
-        actions: "sw-actions-lg",
-        confirmButton: "sw-btn-lg",
-        cancelButton: "sw-btn-lg sw-btn-ghost",
-      },
-    });
-    if (!res.isConfirmed) return;
-
+  const handleSubmit = () => {
+    // ✅ capturar todo ANTES de que Notiflix tome el control
     const input: GastoInput = {
       fecha,
       descripcion: descripcion.trim(),
       monto: monto ?? 0,
- 
     };
-    await onSubmit({ input, id: initial?.id });
-    resetToDefaults();
-    onClose();
+    const id = initial?.id;
+
+    Notiflix.Confirm.show(
+      cta,
+      mode === "create"
+        ? "¿Confirmás guardar este vencimiento?"
+        : "¿Confirmás actualizar este vencimiento?",
+      cta,
+      "Cancelar",
+      async () => {
+        console.log("🟡 Confirm confirmado, llamando onSubmit");
+        await onSubmit({ input, id });
+        console.log("✅ onSubmit terminó");
+        resetToDefaults();
+        onClose();
+      },
+      () => {},
+    );
   };
 
   if (!isOpen) return null;
@@ -190,12 +203,20 @@ const VetoModal = ({
 
           <div className="gm-field">
             <label>Descripción</label>
-            <textarea
-              rows={2}
+
+            <input
+              type="text"
+              list="sugerencias-vetos"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
-              placeholder="Ej: Supermercado / Farmacia / etc."
+              placeholder="Ej: Luz / Gas / Internet..."
+              className="gm-input"
             />
+            <datalist id="sugerencias-vetos">
+              {sugerencias.map((s) => (
+                <option key={s} value={s} />
+              ))}
+            </datalist>
           </div>
 
           <div className="gm-field">

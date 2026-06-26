@@ -1,0 +1,201 @@
+/* ── Contenedor ── */
+.tabla-ind {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+}
+.tabla-ind__title {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  text-align: center;
+  font-size: 3rem;
+}
+
+/* ── Scroll horizontal ── */
+.tabla-ind__scroller {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Tabla ── */
+.tabla-ind__table {
+  border-collapse: collapse;
+  table-layout: auto; /* auto para que cada col tome lo que necesita */
+}
+.tabla-ind__thead {
+  background: #e0ffff;
+}
+.tabla-ind__th,
+.tabla-ind__td {
+  padding: 8px 6px;
+  border-bottom: 1px solid #f1f1f1;
+  text-align: left;
+  white-space: nowrap; /* evita que los headers se partan */
+}
+
+/* ── N° ── */
+.tabla-ind__th--idx,
+.tabla-ind__td--idx {
+  width: 30px;
+  text-align: center;
+  color: #666;
+  font-size: 1.25rem;
+}
+
+/* ── Fecha ── */
+.tabla-ind__th--fecha,
+.tabla-ind__td--fecha {
+  text-align: center;
+}
+
+/* ── Checkboxes ── */
+.tabla-ind__th--check,
+.tabla-ind__td--check {
+  width: 30px;
+  text-align: center;
+  padding: 4px 2px;
+}
+.tabla-ind__td--check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+/* ── Descripción: la única que crece ── */
+.tabla-ind__th--desc {
+  text-align: center;
+}
+.tabla-ind__td--desc {
+  white-space: normal; /* permite wrap */
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+/* ── Monto ── */
+.tabla-ind__th--right,
+.tabla-ind__td--right {
+  width: 100px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── Hover ── */
+.tabla-ind__tr:hover .tabla-ind__td {
+  background: #f3f5f7;
+}
+
+/* ── Sin datos ── */
+.tabla-ind__empty {
+  text-align: center;
+  color: #999;
+  padding: 16px;
+  white-space: normal;
+}
+
+/* ── Fila total ── */
+.tabla-ind__tr-total {
+  background: #f8f8f8;
+}
+.tabla-ind__tr-total .tabla-ind__td,
+.tabla-ind__td-total {
+  font-weight: 600;
+  border-bottom: none;
+}
+.tabla-ind__td-total-label {
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  color: #444;
+}
+.tabla-ind__td-total {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── Fila pagada ── */
+.tabla-ind__tr--pagado .tabla-ind__td {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+.tabla-ind__tr--pagado .tabla-ind__td--check,
+.tabla-ind__tr--pagado .tabla-ind__td--idx {
+  text-decoration: none;
+  opacity: 1;
+}
+
+/* ── Descripción: wrap de iconos + texto ── */
+.td-desc__wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.td-desc__text {
+  flex: 1 1 auto;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+/* ── Botones emoji ── */
+.td-desc__btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  opacity: 0.85;
+  padding: 0 1px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.td-desc__btn:hover {
+  opacity: 1;
+  transform: translateY(-0.5px);
+}
+.td-desc__btn:active {
+  transform: translateY(0);
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .tabla-ind__title {
+    font-size: 3rem;
+  }
+  .tabla-ind__th,
+  .tabla-ind__td {
+    padding: 6px 2px;
+    font-size: 1.5rem;
+  }
+  .tabla-ind__th--idx,
+  .tabla-ind__td--idx {
+    width: 22px;
+    font-size: 1.5rem;
+  }
+  .tabla-ind__th--fecha,
+  .tabla-ind__td--fecha {
+    width: 48px;
+    font-size: 1.5rem;
+  }
+  .tabla-ind__th--check,
+  .tabla-ind__td--check {
+    width: 24px;
+    padding: 4px 1px;
+  }
+  .tabla-ind__td--check input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+  }
+  .tabla-ind__th--right,
+  .tabla-ind__td--right {
+    width: 82px;
+    font-size: 1.5rem;
+  }
+  .tabla-ind__td--desc {
+    min-width: 90px;
+  }
+  .td-desc__btn {
+    font-size: 13px;
+  }
+}

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { GastoMensual } from "../types/GastosMensuales";
 import mesActual from "../helpers/g-m/utils/mesActual";
 import calcularGastos from "../helpers/g-m/utils/calcularGastos";
-import "../styles/GastosMensuales.css";
+import "../styles/VetosMensuales.css";
 import type { Gasto, GastoInput } from "../components/VetoModal";
 import type { FilaGasto } from "../components/TablaVeto";
 import Notiflix from "notiflix";
@@ -14,14 +14,24 @@ import {
   doc,
   getDocs,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../helpers/firebase";
-import TablaVeto from "../components/TablaVeto";
-import VetoModal from "../components/VetoModal";
+import TablaVeto, { formatFechaCorta } from "../components/TablaVeto";
+import VetoModal, { invalidarCacheSugerencias } from "../components/VetoModal";
+import ResumenVeto from "../components/ResumenVeto";
 
 // ✅ Declarada arriba del todo para que los useEffect puedan usarla
 const asc = (a: GastoMensual, b: GastoMensual) =>
   a.fecha.localeCompare(b.fecha);
+
+const generarId = (): string => {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // fallback para browsers viejos o HTTP
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+};
 
 const VetosMensuales = () => {
   const [vetos, setVetos] = useState<GastoMensual[]>([]);
@@ -30,6 +40,8 @@ const VetosMensuales = () => {
 
   const [open, setOpen] = useState(false);
   const [editItem, setEditItem] = useState<Gasto | null>(null);
+  const [pagados, setPagados] = useState<Set<string>>(new Set());
+  const [seleccionados, setSeleccionados] = useState<Set<string>>(new Set());
 
   // ─── Carga inicial desde Firestore ───────────────────────────────────────
   useEffect(() => {
@@ -39,11 +51,14 @@ const VetosMensuales = () => {
       try {
         const snap = await getDocs(collection(db, "VetosMensuales"));
         const todos: GastoMensual[] = [];
+        const pagadosFirestore = new Set<string>();
 
         snap.forEach((docSnap) => {
           const data = docSnap.data() as any;
+          const id = data.id ?? docSnap.id;
+
           todos.push({
-            id: data.id ?? docSnap.id,
+            id,
             fecha: data.fecha,
             descripcion: data.descripcion,
             pagadoPor: "carolina",
@@ -51,9 +66,15 @@ const VetosMensuales = () => {
             periodoKey: data.periodoKey ?? "",
             periodoLabel: data.periodoLabel ?? "",
           });
+
+          // ✅ leer pagado directo del doc crudo, antes de que lo pierda el mapeo
+          if (data.pagado === true) {
+            pagadosFirestore.add(id);
+          }
         });
 
         setVetos(todos.sort(asc));
+        setPagados(pagadosFirestore);
       } catch (error) {
         console.error("Error al cargar vencimientos desde Firestore:", error);
         toast.error("Error al cargar los vencimientos");
@@ -74,6 +95,56 @@ const VetosMensuales = () => {
     setMes(periodLabel);
   }, [vetos_ordenados]);
 
+  // ─── Toggle pagado (persiste en Firestore) ───────────────────────────────
+  const togglePagado = async (id: string) => {
+    const yaEsta = pagados.has(id);
+    try {
+      await setDoc(
+        doc(db, "VetosMensuales", id),
+        { pagado: !yaEsta },
+        { merge: true },
+      );
+      setPagados((prev) => {
+        const next = new Set(prev);
+        yaEsta ? next.delete(id) : next.add(id);
+        return next;
+      });
+      toast.success(yaEsta ? "Factura desmarcada" : "Factura pagada ✅");
+    } catch (error) {
+      console.error("Error al actualizar estado pagado:", error);
+      toast.error("Error al guardar el estado");
+    }
+  };
+
+  // ─── Toggle selección (solo local) ───────────────────────────────────────
+  const toggleSeleccion = (id: string) => {
+    setSeleccionados((prev) => {
+      const next = new Set(prev);
+      prev.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  // ─── Cálculos de resumen ─────────────────────────────────────────────────
+  const totalPagado = useMemo(
+    () =>
+      vetos_ordenados
+        .filter((v) => pagados.has(v.id!))
+        .reduce((a, v) => a + v.monto, 0),
+    [vetos_ordenados, pagados],
+  );
+  const totalAPagar = useMemo(
+    () => Math.round((total - totalPagado) * 100) / 100,
+    [total, totalPagado],
+  );
+  const totalSeleccionados = useMemo(
+    () =>
+      vetos_ordenados
+        .filter((v) => seleccionados.has(v.id!))
+        .reduce((a, v) => a + v.monto, 0),
+    [vetos_ordenados, seleccionados],
+  );
+
   // ─── Abrir modal ──────────────────────────────────────────────────────────
   const abrirCrear = () => {
     setEditItem(null);
@@ -88,7 +159,8 @@ const VetosMensuales = () => {
     input: GastoInput;
     id?: string;
   }) => {
-    const finalId = id ?? crypto.randomUUID();
+    console.log("🟡 handleSubmit llamado", { input, id });
+    const finalId = id ?? generarId();
 
     const row: GastoMensual = {
       id: finalId,
@@ -103,9 +175,24 @@ const VetosMensuales = () => {
     Notiflix.Loading.circle("Guardando vencimiento...");
 
     try {
+      console.log("🟡 antes del setDoc", finalId);
       await setDoc(doc(db, "VetosMensuales", finalId), row);
+      console.log("✅ setDoc OK");
 
-      // ✅ Actualiza estado local: saca el viejo (si existía) y agrega el nuevo
+      // sugerencias
+      const descNormalizada = input.descripcion.trim();
+      await setDoc(
+        doc(
+          db,
+          "sugerenciasVetos",
+          descNormalizada.toLowerCase().replace(/\s+/g, "-"),
+        ),
+        { descripcion: descNormalizada },
+        { merge: true },
+      );
+      console.log("✅ sugerencia OK");
+
+      invalidarCacheSugerencias();
       setVetos((prev) =>
         [...prev.filter((g) => g.id !== finalId), row].sort(asc),
       );
@@ -114,7 +201,7 @@ const VetosMensuales = () => {
       setOpen(false);
       setEditItem(null);
     } catch (error) {
-      console.error("Error al guardar vencimiento en Firestore:", error);
+      console.error("❌ Error en handleSubmit:", error);
       toast.error("Error al guardar el vencimiento");
     } finally {
       Notiflix.Loading.remove();
@@ -124,10 +211,10 @@ const VetosMensuales = () => {
   // ─── Editar ───────────────────────────────────────────────────────────────
   const onEdit = (row: FilaGasto) => {
     const g: Gasto = {
-      id: row.id || crypto.randomUUID(),
+      id: row.id || generarId(),
       fecha: row.fecha,
       descripcion: row.descripcion,
-      monto: row.monto,  
+      monto: row.monto,
     };
     setEditItem(g);
     setOpen(true);
@@ -142,7 +229,7 @@ const VetosMensuales = () => {
 
     Notiflix.Confirm.show(
       "Borrar vencimiento",
-      `¿Seguro que querés borrar "${row.descripcion}" del ${row.fecha}?`,
+      `¿Seguro que querés borrar "${row.descripcion}" del ${formatFechaCorta(row.fecha)}?`,
       "Borrar",
       "Cancelar",
       async () => {
@@ -240,14 +327,32 @@ const VetosMensuales = () => {
         </div>
       </section>
 
-      <div className="tablas-mes-grid">
-        <TablaVeto
-          titulo={mes}
-          rows={vetos_ordenados}
-          labelTotal="Total"
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
+      <div className="vetos-layout">
+        <div className="vetos-layout__tabla">
+          <TablaVeto
+            titulo={mes}
+            rows={vetos_ordenados}
+            labelTotal="Total"
+            onEdit={onEdit}
+            onDelete={onDelete}
+            pagados={pagados}
+            seleccionados={seleccionados}
+            onTogglePagado={(id) => togglePagado(id)}
+            onToggleSeleccion={toggleSeleccion}
+          />
+        </div>
+
+        {vetos_ordenados.length > 0 && (
+          <div className="vetos-layout__resumen">
+            <ResumenVeto
+              total={total}
+              totalPagado={totalPagado}
+              totalAPagar={totalAPagar}
+              totalSeleccionados={totalSeleccionados}
+              cantSeleccionados={seleccionados.size}
+            />
+          </div>
+        )}
       </div>
 
       <VetoModal

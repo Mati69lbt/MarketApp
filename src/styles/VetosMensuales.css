@@ -3,26 +3,34 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
-  padding: 0 16px; /* espacio lateral en desktop y mobile */
+  padding: 0 2px;
 }
 
-@media (min-width: 992px) {
-  .tablas-mes-grid {
-    grid-template-columns: repeat(
-      2,
-      minmax(420px, 520px)
-    ); /* dos columnas más finas */
-    justify-content: center; /* deja espacio a izquierda y derecha */
-    column-gap: 24px; /* espacio entre tablas */
-  }
-  .tablas-mes-grid > .tabla-ind {
-    margin: 0 auto; /* centra cada tarjeta dentro de su columna */
-  }
+/* ── Layout tabla + resumen ── */
+.vetos-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 2px;
 }
 
-.tablas-mes-grid--calc {
-  grid-template-columns: 1fr; /* un solo hijo, ocupa el ancho del contenedor */
-  margin-top: 16px; /* separa de las tablas superiores */
+/* en pantallas grandes: lado a lado */
+@media (min-width: 768px) {
+  .vetos-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  /* la tabla ocupa el espacio disponible */
+  .vetos-layout__tabla {
+    flex: 1 1 0;
+    min-width: 0; /* evita que desborde */
+  }
+
+  /* el resumen tiene ancho fijo y no crece */
+  .vetos-layout__resumen {
+    flex: 0 0 260px;
+  }
 }
 
 .head {

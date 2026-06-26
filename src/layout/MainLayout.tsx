@@ -28,7 +28,7 @@ const MainLayout = () => {
       await signInWithEmailAndPassword(
         auth,
         "mati69_lbt@hotmail.com",
-        "compras"
+        "compras",
       );
       toast.success("Login exitoso");
     } catch (error) {
@@ -53,13 +53,13 @@ const MainLayout = () => {
     <div>
       <nav className="navbar">
         <div className="navbar-header">
+          <div className="logo">🛒 MarketApp</div>
           <button
             className="menu-toggle"
             onClick={() => document.body.classList.toggle("menu-open")}
           >
             ☰
           </button>
-          <div className="logo">🛒 MarketApp</div>
         </div>
 
         <div className="navbar-links">
@@ -97,14 +97,7 @@ const MainLayout = () => {
             className={({ isActive }) => (isActive ? "activo" : "")}
           >
             Gastos Mensuales
-          </NavLink>
-          <NavLink
-            to="/historial"
-            onClick={cerrarMenu}
-            className={({ isActive }) => (isActive ? "activo" : "")}
-          >
-            Historial
-          </NavLink>
+          </NavLink>         
           {usuario ? (
             <button className="logOut" onClick={handleLogout}>
               Log Out
