@@ -79,7 +79,7 @@ const TablaVeto = ({
               <th className="tabla-ind__th tabla-ind__th--check" title="Pagado">
                 ✅
               </th>
-              <th className="tabla-ind__th tabla-ind__th--desc">Descripción</th>
+              <th className="tabla-ind__th tabla-ind__th--desc_veto">Descripción</th>
               <th className="tabla-ind__th tabla-ind__th--right">Monto</th>
               <th
                 className="tabla-ind__th tabla-ind__th--check"
@@ -124,7 +124,7 @@ const TablaVeto = ({
                       )}
                     </td>
                     <td
-                      className="tabla-ind__td tabla-ind__td--desc"
+                      className="tabla-ind__td tabla-ind__td--desc_veto"
                       title={prettyDescripcion(g.descripcion)}
                     >
                       <div className="td-desc__wrap">

@@ -1,8 +1,7 @@
 //cspell: ignore fechaiso Swal Confirmás Descripcion Matías anio mes gm-modal gm-hint gm-periodo gm-input gm-field gm-radios gm-btn gm-close bloqueante descripcion sweetalert2 Notiflix
 import { useEffect, useMemo, useState } from "react";
 import { NumericFormat } from "react-number-format";
-import "../styles/GastoModal.css";
-import Swal from "sweetalert2";
+import "../styles/VetoModal.css";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../helpers/firebase";
 import Notiflix from "notiflix";
@@ -135,29 +134,16 @@ const VetoModal = ({
     setMonto(0);
   };
 
-  const handleSubmit = () => {
-    // ✅ capturar todo ANTES de que Notiflix tome el control
+  const handleSubmit = async () => {
     const input: GastoInput = {
       fecha,
       descripcion: descripcion.trim(),
       monto: monto ?? 0,
     };
     const id = initial?.id;
-
-    Notiflix.Confirm.show(
-      cta,
-      mode === "create"
-        ? "¿Confirmás guardar este vencimiento?"
-        : "¿Confirmás actualizar este vencimiento?",
-      cta,
-      "Cancelar",
-      async () => {
-        await onSubmit({ input, id });  
-        resetToDefaults();
-        onClose();
-      },
-      () => {},
-    );
+    await onSubmit({ input, id });
+    resetToDefaults();
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -231,6 +217,17 @@ const VetoModal = ({
               className="gm-input"
             />
           </div>
+          {fecha && (
+            <div className="gm-fecha-preview">
+              📅{" "}
+              {new Date(fecha + "T12:00:00").toLocaleDateString("es-AR", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </div>
+          )}
         </div>
 
         <div className="gm-modal__footer">
