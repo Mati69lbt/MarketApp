@@ -39,8 +39,7 @@ const GastosMensuales = () => {
   const [backup_Carolina, setBackup_Carolina] = useState<GastoMensual[]>([]);
   /************* fin *************/
 
-  console.log(backup_Matias);
-  console.log(backup_Carolina);
+
 
   useEffect(() => {
     const cargarGastos = async () => {
@@ -51,7 +50,7 @@ const GastosMensuales = () => {
 
         const todos: GastoMensual[] = [];
 
-        console.log(todos);
+    
 
         snap.forEach((docSnap) => {
           const data = docSnap.data() as any;

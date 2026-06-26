@@ -152,9 +152,7 @@ const VetoModal = ({
       cta,
       "Cancelar",
       async () => {
-        console.log("🟡 Confirm confirmado, llamando onSubmit");
-        await onSubmit({ input, id });
-        console.log("✅ onSubmit terminó");
+        await onSubmit({ input, id });  
         resetToDefaults();
         onClose();
       },

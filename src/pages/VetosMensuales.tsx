@@ -159,7 +159,6 @@ const VetosMensuales = () => {
     input: GastoInput;
     id?: string;
   }) => {
-    console.log("🟡 handleSubmit llamado", { input, id });
     const finalId = id ?? generarId();
 
     const row: GastoMensual = {
@@ -175,9 +174,7 @@ const VetosMensuales = () => {
     Notiflix.Loading.circle("Guardando vencimiento...");
 
     try {
-      console.log("🟡 antes del setDoc", finalId);
       await setDoc(doc(db, "VetosMensuales", finalId), row);
-      console.log("✅ setDoc OK");
 
       // sugerencias
       const descNormalizada = input.descripcion.trim();
@@ -190,7 +187,6 @@ const VetosMensuales = () => {
         { descripcion: descNormalizada },
         { merge: true },
       );
-      console.log("✅ sugerencia OK");
 
       invalidarCacheSugerencias();
       setVetos((prev) =>
