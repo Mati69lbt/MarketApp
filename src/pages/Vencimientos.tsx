@@ -9,28 +9,13 @@ const Vencimientos = () => {
   const [view, setView] = useState("mesActual");
   return (
     <div className="vencimientos-contenedor">
-      <div className="vencimientos-nav">
-        <button
-          className={view === "mesActual" ? "activo" : ""}
-          onClick={() => setView("mesActual")}
-        >
-          Mensual
-        </button>
-        <button
-          className={view === "historico" ? "activo" : ""}
-          onClick={() => setView("historico")}
-        >
-          Histórico
-        </button>
-      </div>
       {view === "mesActual" ? (
-        <div className="vencimientos-seccion">      
-          <VetosMensuales />
+        <div className="vencimientos-seccion">
+          <VetosMensuales setView={setView} />
         </div>
       ) : (
         <div className="vencimientos-seccion">
-          <h2>Vencimientos Históricos</h2>
-          <VetoHisto />
+          <VetoHisto setView={setView} />
         </div>
       )}
     </div>

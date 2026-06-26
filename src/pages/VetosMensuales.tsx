@@ -33,7 +33,11 @@ const generarId = (): string => {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
 };
 
-const VetosMensuales = () => {
+interface Props {
+  setView: (view: string) => void;
+}
+
+const VetosMensuales = ({ setView }: Props) => {
   const [vetos, setVetos] = useState<GastoMensual[]>([]);
   const [total, setTotal] = useState(0);
   const [mes, setMes] = useState("");
@@ -316,6 +320,12 @@ const VetosMensuales = () => {
         <div className="btn-head">
           <button className="gm-btn gm-btn--primary" onClick={abrirCrear}>
             Agregar Factura
+          </button>
+          <button
+            className="gm-btn gm-btn--ter"
+            onClick={() => setView("historico")}
+          >
+            Histórico
           </button>
           <button className="gm-btn gm-btn--secondary" onClick={cerrarMes}>
             Cerrar Mes

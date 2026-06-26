@@ -9,6 +9,7 @@ import TablaVeto from "../components/TablaVeto";
 import type { FilaGasto } from "../components/TablaVeto";
 import "../styles/Historial.css";
 
+
 type HistorialMes = {
   id: string;
   periodoKey: string;
@@ -30,7 +31,11 @@ const formatearPeriodo = (periodoLabel?: string, periodoKey?: string) => {
   return base;
 };
 
-const VetoHisto = () => {
+interface Props {
+  setView: (view: string) => void;
+}
+
+const VetoHisto = ({ setView }: Props) => {
   const [historialMeses, setHistorialMeses] = useState<HistorialMes[]>([]);
   const [mesSeleccionado, setMesSeleccionado] = useState<string>("");
 
@@ -97,7 +102,7 @@ const VetoHisto = () => {
   return (
     <div className="historial">
       <header className="historial-head">
-        <h2>Historial de vencimientos</h2>
+        <h2>Historial de Vencimientos</h2>
         <div className="historial-filtros">
           <select
             value={mesSeleccionado}
@@ -109,6 +114,11 @@ const VetoHisto = () => {
               </option>
             ))}
           </select>
+         
+            <button className="btn-volver" onClick={() => setView("mesActual")}>
+              Volver
+            </button>
+     
         </div>
       </header>
 

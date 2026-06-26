@@ -1,7 +1,6 @@
 /* grid y espacios a los lados */
 .tablas-mes-grid {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 16px;
   padding: 0 16px; /* espacio lateral en desktop y mobile */
 }
