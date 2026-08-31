@@ -12,19 +12,20 @@
 
 @media (min-width: 992px) {
   .tablas-mes-grid {
-    flex-direction: row; /* recién acá quedan lado a lado */
-    justify-content: center; /* deja espacio a izquierda y derecha */
-    gap: 24px; /* espacio entre tablas */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* dos columnas de 50% cada una */
+    gap: 0;
   }
   .tablas-mes-grid > .tabla-ind {
-    width: auto;
-    min-width: 420px;
-    max-width: 520px;
+    width: 65%; /* ocupa el 65% de su columna (32.5% del total) */
+    min-width: 0;
+    max-width: none;
     margin: 0 auto; /* centra cada tarjeta dentro de su columna */
   }
 }
 
 .tablas-mes-grid--calc {
+  display: flex;
   flex-direction: column; /* un solo hijo, ocupa el ancho del contenedor */
   margin-top: 16px; /* separa de las tablas superiores */
 }

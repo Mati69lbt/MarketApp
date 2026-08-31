@@ -1,3 +1,28 @@
+.tablas-mes-grid {
+  display: flex;
+  flex-direction: column; /* mobile-first: una tabla arriba de la otra */
+  gap: 16px;
+  width: 100%;
+}
+
+.tablas-mes-grid > .tabla-ind {
+  width: 100%; /* que cada tabla ocupe todo el ancho disponible en mobile */
+}
+
+@media (min-width: 992px) {
+  .tablas-mes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* dos columnas de 50% cada una */
+    gap: 0;
+  }
+  .tablas-mes-grid > .tabla-ind {
+    width: 65%; /* ocupa el 65% de su columna (32.5% del total) */
+    min-width: 0;
+    max-width: none;
+    margin: 0 auto; /* centra cada tarjeta dentro de su columna */
+  }
+}
+
 .historial {
   min-height: calc(100vh - 120px); /* ajustá si tenés navbar fija */
   display: flex;

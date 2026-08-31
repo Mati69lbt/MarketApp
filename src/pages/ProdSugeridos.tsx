@@ -188,9 +188,16 @@ const ProdSugeridos = () => {
           const items = productosPorCategoria[categoria];
           if (!items) return null;
           return (
-            <div key={categoria}>
-              <h2>{categoria}</h2>
-              <ul>
+            <div key={categoria} className="prod-categoria">
+              <input
+                type="checkbox"
+                id={`acc-${categoria}`}
+                className="prod-acc-toggle"
+              />
+              <label htmlFor={`acc-${categoria}`} className="prod-acc-label">
+                <h2>{categoria}</h2>
+              </label>
+              <ul className="prod-acc-content">
                 {items.map((prod) => (
                   <label key={prod.nombre} className="prod-item">
                     <input

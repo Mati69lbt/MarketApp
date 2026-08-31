@@ -1,20 +1,24 @@
 .prod-sugeridos {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 2rem;
-  justify-content: center;
   padding: 2rem 1rem;
 }
 
-.prod-sugeridos > div {
-  flex: 1 1 20%;
-  max-width: 20%;
-  min-width: 280px;
+.prod-categoria {
   background-color: #fdfdfd;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.prod-acc-toggle {
+  display: none;
+}
+
+.prod-acc-label {
+  cursor: default;
 }
 
 .prod-sugeridos h2 {
@@ -131,18 +135,29 @@
     font-size: 1.5rem;
   }
   .prod-sugeridos {
-    justify-content: space-evenly; /* distribuir mejor el espacio */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
-  .prod-sugeridos > div {
-    flex: 1 1 45%; /* 💥 dos columnas en móviles */
-    max-width: 45%;
-    min-width: 140px;
+  .prod-acc-label {
+    cursor: pointer;
   }
-  .prod-sugeridos h2 {
+
+  .prod-categoria h2 {
     font-size: 2rem;
     text-align: center;
     margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .prod-acc-content {
+    display: none;
+  }
+
+  .prod-acc-toggle:checked ~ .prod-acc-content {
+    display: block;
+    margin-top: 1rem;
   }
   .prod-sugeridos ul {
     font-size: 1.5rem;

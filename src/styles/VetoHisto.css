@@ -1,6 +1,7 @@
 .vetohisto-grid {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
   gap: 5px;
   padding: 0 8px;
 }
