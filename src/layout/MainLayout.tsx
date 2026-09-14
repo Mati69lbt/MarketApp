@@ -114,6 +114,14 @@ const MainLayout = () => {
           >
             Vencimientos
           </NavLink>
+          <a
+            href="https://comparar-precios-supermercados.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={cerrarMenu}
+          >
+            Comparador de Precios
+          </a>
         </div>
       </nav>
 
