@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import "../styles/GastoModal.css";
 import Swal from "sweetalert2";
+import SelectMedioPago from "./SelectMedioPago";
 
 export type Persona = "Carolina" | "Matías";
 
@@ -12,6 +13,7 @@ export interface Gasto {
   descripcion: string;
   monto: number; // guardado como number
   pagadoPor: Persona;
+  medioPago?: string;
 }
 
 export type GastoInput = Omit<Gasto, "id">;
@@ -77,6 +79,9 @@ const GastoModal = ({
   const [pagadoPor, setPagadoPor] = useState<Persona>(
     (initial?.pagadoPor as Persona) ?? "Carolina"
   );
+  const [medioPago, setMedioPago] = useState<string | undefined>(
+    initial?.medioPago
+  );
 
   const disabled =
     !fecha || !descripcion.trim() || (monto ?? 0) <= 0 || !pagadoPor;
@@ -100,12 +105,14 @@ const GastoModal = ({
       setDescripcion(initial.descripcion ?? "");
       setMonto(typeof initial.monto === "number" ? initial.monto : 0);
       setPagadoPor((initial.pagadoPor as Persona) ?? "Carolina");
+      setMedioPago(initial.medioPago);
     } else {
       // crear: limpio por defecto
       setFecha(new Date().toISOString().slice(0, 10));
       setDescripcion("");
       setMonto(0);
       setPagadoPor("Carolina");
+      setMedioPago(undefined);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, mode, initial?.id]);
@@ -120,6 +127,7 @@ const GastoModal = ({
     setFecha(todayISO());
     setDescripcion("");
     setMonto(0);
+    setMedioPago(undefined);
   };
 
   const handleSubmit = async () => {
@@ -153,6 +161,7 @@ const GastoModal = ({
       descripcion: descripcion.trim(),
       monto: monto ?? 0,
       pagadoPor,
+      medioPago,
     };
     await onSubmit({ input, id: initial?.id });
     resetToDefaults();
@@ -208,19 +217,26 @@ const GastoModal = ({
             />
           </div>
 
-          <div className="gm-field">
-            <label>Monto</label>
-            <NumericFormat
-              value={monto}
-              thousandSeparator="."
-              decimalSeparator=","
-              allowNegative={false}
-              prefix="$   "
-              decimalScale={2}
-              fixedDecimalScale
-              onValueChange={({ floatValue }) => setMonto(floatValue ?? 0)}
-              className="gm-input"
-            />
+          <div className="gm-row">
+            <div className="gm-field">
+              <label>Monto</label>
+              <NumericFormat
+                value={monto}
+                thousandSeparator="."
+                decimalSeparator=","
+                allowNegative={false}
+                prefix="$   "
+                decimalScale={2}
+                fixedDecimalScale
+                onValueChange={({ floatValue }) => setMonto(floatValue ?? 0)}
+                className="gm-input"
+              />
+            </div>
+
+            <div className="gm-field">
+              <label>Forma de pago</label>
+              <SelectMedioPago value={medioPago} onChange={setMedioPago} />
+            </div>
           </div>
 
           <div className="gm-field">

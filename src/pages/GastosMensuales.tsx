@@ -68,6 +68,7 @@ const GastosMensuales = () => {
             pagadoPor: pagadoNormalizado,
             periodoKey: data.periodoKey ?? "",
             periodoLabel: data.periodoLabel ?? "",
+            ...(data.medioPago ? { medioPago: data.medioPago } : {}),
           });
         });
 
@@ -128,6 +129,7 @@ const GastosMensuales = () => {
       pagadoPor: input.pagadoPor === "Matías" ? "matias" : "carolina", // según tu tipo
       periodoKey: "", // o lo que uses como clave
       periodoLabel: mes,
+      ...(input.medioPago ? { medioPago: input.medioPago } : {}),
     };
 
     const gastoFirestore = {
@@ -219,6 +221,7 @@ const GastosMensuales = () => {
       descripcion: row.descripcion,
       monto: row.monto,
       pagadoPor: "Carolina",
+      medioPago: row.medioPago,
     };
     setEditItem(g);
     setOpen(true);
@@ -231,6 +234,7 @@ const GastosMensuales = () => {
       descripcion: row.descripcion,
       monto: row.monto,
       pagadoPor: "Matías",
+      medioPago: row.medioPago,
     };
     setEditItem(g);
     setOpen(true);

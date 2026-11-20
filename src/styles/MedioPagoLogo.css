@@ -1,0 +1,27 @@
+.mp-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.mp-logo--fallback {
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mp-logo--img {
+  border-radius: 6px;
+  background: #fff;
+  padding: 2px 4px;
+  overflow: hidden;
+}
+
+.mp-logo--img img {
+  display: block;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}

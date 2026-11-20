@@ -45,6 +45,20 @@
   cursor: pointer;
 }
 
+.gm-row {
+  display: flex;
+  gap: 12px;
+}
+.gm-row .gm-field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+@media (max-width: 480px) {
+  .gm-row {
+    flex-direction: column;
+  }
+}
+
 .gm-field {
   display: flex;
   flex-direction: column;

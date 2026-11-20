@@ -1,0 +1,175 @@
+.smp {
+  position: relative;
+  width: 100%;
+}
+
+.smp__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  min-height: 46px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.smp__trigger:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.smp__valor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.smp__valor-texto {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.smp__placeholder {
+  color: #9ca3af;
+}
+
+.smp__caret {
+  flex: 0 0 auto;
+  color: #6b7280;
+}
+
+.smp__lista {
+  position: absolute;
+  z-index: 1100;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+}
+
+.smp__cargando {
+  padding: 8px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.smp__opcion {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.smp__opcion-btn {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  min-height: 46px;
+  border: 0;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  min-width: 0;
+}
+
+.smp__opcion-btn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.smp__opcion-btn:hover,
+.smp__opcion-btn:focus-visible {
+  background: #f3f4f6;
+}
+
+.smp__opcion-del {
+  flex: 0 0 auto;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  font-size: 13px;
+  opacity: 0.7;
+  border-radius: 6px;
+}
+
+.smp__opcion-del:hover {
+  opacity: 1;
+  background: #fee2e2;
+}
+
+.smp__opcion--nuevo {
+  border-top: 1px solid #eee;
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+.smp__opcion-btn--nuevo {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.smp__nuevo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 4px;
+  width: 100%;
+}
+
+.smp__nuevo-form input {
+  padding: 8px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.smp__nuevo-acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.smp__nuevo-ok,
+.smp__nuevo-cancel {
+  flex: 1 1 auto;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.smp__nuevo-ok {
+  background: #2563eb;
+  color: #fff;
+}
+
+.smp__nuevo-cancel {
+  background: #f3f4f6;
+}
+
+@media (max-width: 600px) {
+  .smp__lista {
+    max-height: 220px;
+  }
+}

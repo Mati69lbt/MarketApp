@@ -9,6 +9,7 @@ export interface GastoMensual {
   pagadoPor: Persona;
   periodoKey: string;
   periodoLabel: string;
+  medioPago?: string;
 }
 
 export interface ResumenMensual {

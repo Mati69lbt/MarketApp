@@ -26,9 +26,10 @@
 }
 .tabla-ind__th,
 .tabla-ind__td {
-  padding: 8px;
+  padding: 10px 8px;
   border-bottom: 1px solid #f1f1f1;
   text-align: left;
+  vertical-align: middle;
 }
 .tabla-ind__th--right,
 .tabla-ind__td--right {
@@ -109,7 +110,7 @@
     width: auto;
   } /* deja que la desc. use el resto */
   .tabla-ind__td {
-    padding: 6px 8px;
+    padding: 8px;
   } /* un toque más compacto */
   .tabla-ind__scroller {
     -webkit-overflow-scrolling: touch;
@@ -162,4 +163,38 @@
   /* opcional: coloriza el emoji via filter si usás SVG; aquí lo dejamos simple */
 }
 .td-desc__btn--del {
+}
+
+/* columna Pago */
+.tabla-ind__th--pago,
+.tabla-ind__td--pago {
+  width: 100px;
+  text-align: center;
+}
+.td-pago__wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+.td-pago__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60px;
+  font-size: 12px;
+}
+.td-pago__empty {
+  color: #999;
+}
+
+@media (max-width: 600px) {
+  .tabla-ind__th--pago,
+  .tabla-ind__td--pago {
+    width: 80px;
+  }
+  .td-pago__text {
+    max-width: 40px;
+  }
 }

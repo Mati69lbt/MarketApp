@@ -1,6 +1,8 @@
 //cspell:ignore FilaGasto descripcion
 import React, { useMemo } from "react";
 import { NumericFormat } from "react-number-format";
+import MedioPagoLogo from "./MedioPagoLogo";
+import { getLogoMedioPago } from "../helpers/g-m/mediosPagoLogos";
 import "../styles/TablaIndividual.css";
 
 export interface FilaGasto {
@@ -8,6 +10,7 @@ export interface FilaGasto {
   fecha: string; // "YYYY-MM-DD"
   descripcion: string;
   monto: number; // valor crudo, no string
+  medioPago?: string;
 }
 
 interface TablaIndividualProps {
@@ -54,6 +57,10 @@ const TablaIndividual = ({
     );
     return Math.round(sum * 100) / 100;
   }, [filasOrdenadas]);
+
+  const colsBase = (showIndex ? 1 : 0) + 4; // [idx] + fecha + desc + pago + monto
+  const colsSinMonto = colsBase - 1;
+
   return (
     <section className={`tabla-ind ${className}`}>
       <h3 className="tabla-ind__title">{titulo}</h3>
@@ -67,13 +74,14 @@ const TablaIndividual = ({
               )}
               <th className="tabla-ind__th tabla-ind__th--fecha">Fecha</th>
               <th className="tabla-ind__th tabla-ind__th--desc">Descripción</th>
+              <th className="tabla-ind__th tabla-ind__th--pago">Pago</th>
               <th className="tabla-ind__th tabla-ind__th--right">Monto</th>
             </tr>
           </thead>
           <tbody className="tabla-ind__tbody">
             {filasOrdenadas.length === 0 ? (
               <tr>
-                <td className="tabla-ind__empty" colSpan={4}>
+                <td className="tabla-ind__empty" colSpan={colsBase}>
                   Sin datos
                 </td>
               </tr>
@@ -119,6 +127,22 @@ const TablaIndividual = ({
                       )}
                     </div>
                   </td>
+                  <td className="tabla-ind__td tabla-ind__td--pago">
+                    {g.medioPago ? (
+                      <span
+                        className="td-pago__wrap"
+                        title={g.medioPago}
+                        aria-label={g.medioPago}
+                      >
+                        <MedioPagoLogo nombre={g.medioPago} size={30} />
+                        {!getLogoMedioPago(g.medioPago) && (
+                          <span className="td-pago__text">{g.medioPago}</span>
+                        )}
+                      </span>
+                    ) : (
+                      <span className="td-pago__empty">—</span>
+                    )}
+                  </td>
                   <td className="tabla-ind__td tabla-ind__td--right">
                     <NumericFormat
                       value={g.monto}
@@ -134,7 +158,7 @@ const TablaIndividual = ({
               ))
             )}
             <tr className="tabla-ind__tr-total">
-              <td className="tabla-ind__td-total-label" colSpan={3}>
+              <td className="tabla-ind__td-total-label" colSpan={colsSinMonto}>
                 {labelTotal ?? "Total"}
               </td>
               <td className="tabla-ind__td-total tabla-ind__td--right">
