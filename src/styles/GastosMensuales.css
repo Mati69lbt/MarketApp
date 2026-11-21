@@ -6,7 +6,7 @@
   padding: 0 16px;
 }
 
-.tablas-mes-grid > .tabla-ind {
+.tablas-mes-grid > .gm-tabla {
   width: 100%; /* que cada tabla ocupe todo el ancho disponible en mobile */
 }
 
@@ -16,7 +16,7 @@
     grid-template-columns: 1fr 1fr; /* dos columnas de 50% cada una */
     gap: 0;
   }
-  .tablas-mes-grid > .tabla-ind {
+  .tablas-mes-grid > .gm-tabla {
     width: 65%; /* ocupa el 65% de su columna (32.5% del total) */
     min-width: 0;
     max-width: none;

@@ -1,147 +1,149 @@
 /* Contenedor */
-.tabla-ind {
+.gm-tabla {
   border: 1px solid #eee;
   border-radius: 12px;
   padding: 12px;
   background: #fff;
 }
-.tabla-ind__title {
+.gm-tabla__title {
   margin: 0 0 8px 0;
   font-weight: 600;
   text-align: center;
   font-size: 3rem;
 }
 /* Scroll horizontal en mobile */
-.tabla-ind__scroller {
+.gm-tabla__scroller {
   overflow-x: auto;
 }
-/* Tabla */
-.tabla-ind__table {
+/* Tabla
+   table-layout:auto (no "fixed"): la colisión de nombres con TablaVeto.css
+   hacía que esta tabla, en la práctica, siempre se mostrara con "auto"
+   (el ancho se reparte según el contenido real). Lo dejamos explícito para
+   no cambiar cómo se ve hoy en escritorio al sacar esa colisión. */
+.gm-tabla__table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
 }
-.tabla-ind__thead {
+.gm-tabla__thead {
   background: #e0ffff;
 }
-.tabla-ind__th,
-.tabla-ind__td {
+.gm-tabla__th,
+.gm-tabla__td {
   padding: 10px 8px;
   border-bottom: 1px solid #f1f1f1;
   text-align: left;
   vertical-align: middle;
 }
-.tabla-ind__th--right,
-.tabla-ind__td--right {
+.gm-tabla__th--right,
+.gm-tabla__td--right {
   width: 120px; /* antes no tenía ancho fijo */
   text-align: right;
   white-space: nowrap;
 }
-.tabla-ind__th--idx,
-.tabla-ind__td--idx {
+.gm-tabla__th--idx,
+.gm-tabla__td--idx {
   width: 30px;
   text-align: center;
   /* background: red; */
   color: #666;
 }
-.tabla-ind__tr:hover .tabla-ind__td {
+.gm-tabla__tr:hover .gm-tabla__td {
   background: #fcfcfc;
 }
-.tabla-ind__empty {
+.gm-tabla__empty {
   text-align: center;
   color: #999;
   padding: 16px;
 }
 
 /* Total */
-.tabla-ind__tr-total .tabla-ind__td,
-.tabla-ind__td-total {
+.gm-tabla__tr-total .gm-tabla__td,
+.gm-tabla__td-total {
   font-weight: 600;
   border-bottom: none;
 }
-.tabla-ind__td-total-label {
+.gm-tabla__td-total-label {
   color: #333;
 }
 
 /* Anchos controlados por columna */
-.tabla-ind__th--fecha,
-.tabla-ind__td--fecha {
+.gm-tabla__th--fecha,
+.gm-tabla__td--fecha {
   width: 65px; /* "2 Ene" etc. */
   white-space: nowrap;
 }
 
-.tabla-ind__th--desc {
+.gm-tabla__th--desc {
   /* solo header para que table-layout fije proporción */
   width: 50%;
   text-align: center;
 }
 
 /* Descripción compacta (2 líneas con elipsis) */
-.tabla-ind__td--desc {
+.gm-tabla__td--desc {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
   line-height: 1.25;
 }
 
-.tabla-ind__tr-total {
+.gm-tabla__tr-total {
   background: #f8f8f8;
 }
-.tabla-ind__td-total-label {
+.gm-tabla__td-total-label {
   text-align: right; /* alinea el label del total a la derecha */
   text-transform: uppercase;
   letter-spacing: 0.2px;
   color: #444;
 }
 
-@media (max-width: 600px) {
-  .tabla-ind__th--right,
-  .tabla-ind__td--right {
-    width: 96px;
-  } /* monto más chico aún */
-  .tabla-ind__th--fecha,
-  .tabla-ind__td--fecha {
-    width: 60px;
-  } /* fecha más chica */
-  .tabla-ind__th--desc,
-  .tabla-ind__td--desc {
-    width: auto;
-  } /* deja que la desc. use el resto */
-  .tabla-ind__td {
-    padding: 8px;
-  } /* un toque más compacto */
-  .tabla-ind__scroller {
-    -webkit-overflow-scrolling: touch;
-  }
-}
-
 /* 7) Hover un poquito más visible (sin “zebras” de color permanente) */
-.tabla-ind__tr:hover .tabla-ind__td {
+.gm-tabla__tr:hover .gm-tabla__td {
   background: #f3f5f7;
 }
 
 /* contenedor flexible para iconos + texto */
-.td-desc__wrap {
+.gm-desc__wrap {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+/* columna interna: texto + (en mobile) fecha debajo */
+.gm-desc__col {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 /* texto con dos líneas máx (tu estilo existente de desc se mantiene) */
-.td-desc__text {
+.gm-desc__text {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
   line-height: 1.25;
-  flex: 1 1 auto; /* que el texto use el espacio disponible */
+}
+
+/* fecha chiquita y gris, solo visible en pantallas chicas (ver media query al final) */
+.gm-desc__fecha-mobile {
+  display: none;
+}
+
+/* número de fila (reemplaza la columna N° oculta en mobile) */
+.gm-desc__idx-mobile {
+  display: none;
 }
 
 /* botoncitos emoji */
-.td-desc__btn {
+.gm-desc__btn {
   appearance: none;
   border: 0;
   background: transparent;
@@ -151,25 +153,26 @@
   opacity: 0.9;
   padding: 0 2px;
 }
-.td-desc__btn:hover {
+.gm-desc__btn:hover {
   opacity: 1;
   transform: translateY(-0.5px);
 }
-.td-desc__btn:active {
+.gm-desc__btn:active {
   transform: translateY(0);
 }
 
-.td-desc__btn--edit {
+.gm-desc__btn--edit {
   /* opcional: coloriza el emoji via filter si usás SVG; aquí lo dejamos simple */
 }
-.td-desc__btn--del {
+.gm-desc__btn--del {
 }
 
 /* columna Pago */
-.tabla-ind__th--pago,
-.tabla-ind__td--pago {
+.gm-tabla__th--pago,
+.gm-tabla__td--pago {
   width: 100px;
   text-align: center;
+  overflow: hidden; /* algunos logos son más anchos que la columna fija */
 }
 .td-pago__wrap {
   display: flex;
@@ -177,6 +180,8 @@
   justify-content: center;
   gap: 6px;
   min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 .td-pago__text {
   overflow: hidden;
@@ -189,12 +194,87 @@
   color: #999;
 }
 
+/* ==========================================================
+   Mobile (<=600px): Nº y Fecha se ocultan; la fecha se fusiona
+   debajo de la Descripción. Todas las reglas responsive quedan
+   en un único bloque al final para que ganen siempre la cascada
+   sobre las reglas base de arriba (mismo nivel de especificidad).
+   ========================================================== */
 @media (max-width: 600px) {
-  .tabla-ind__th--pago,
-  .tabla-ind__td--pago {
-    width: 80px;
+  .gm-tabla__th--right,
+  .gm-tabla__td--right {
+    width: 90px;
+    font-size: 12px; /* evita que montos grandes (ej "$ 313.693,62") desborden y generen scroll horizontal */
+  } /* monto más chico aún */
+
+  /* el total (suma) va más grande que los montos de cada fila */
+  .gm-tabla__td-total {
+    font-size: 17px;
+  }
+
+  /* Fecha se fusiona dentro de la celda de Descripción (ver .gm-desc__fecha-mobile).
+     Columna N° y Fecha: display:none para que no reserven absolutamente
+     nada de ancho (ni padding, ni colgroup, ni mínimos de table-layout:auto). */
+  .gm-tabla__th--fecha,
+  .gm-tabla__td--fecha,
+  .gm-tabla__th--idx,
+  .gm-tabla__td--idx {
+    display: none;
+  }
+
+  .gm-tabla__th--desc,
+  .gm-tabla__td--desc {
+    width: auto;
+    text-align: left;
+  } /* deja que la desc. use el resto; ya no está centrada junto a la col. N° */
+
+  /* reemplaza la columna N° (oculta) con un número inline antes de la descripción */
+  .gm-desc__idx-mobile {
+    display: inline;
+    color: #666;
+    font-weight: 600;
+  }
+
+  .gm-tabla__td {
+    padding: 8px;
+  } /* un toque más compacto */
+
+  .gm-tabla__scroller {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* en mobile no se muestran lápiz/tacho: se toca la fila entera para
+     editar o borrar (ver handleRowClick en TablaIndividual.tsx) */
+  .gm-desc__btn {
+    display: none;
+  }
+  .gm-tabla__tr--clickable {
+    cursor: pointer;
+  }
+
+  .gm-desc__fecha-mobile {
+    display: block;
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  .gm-tabla__th--pago,
+  .gm-tabla__td--pago {
+    width: 78px;
   }
   .td-pago__text {
-    max-width: 40px;
+    max-width: 50px;
+  }
+  /* Logos más grandes que antes (28-32px alto / 60-70px ancho máx.), pero
+     respetando la escala propia de cada logo (ver ESCALA_LOGO en
+     mediosPagoLogos.ts): NO forzamos width/height a un valor fijo (eso
+     borraba la escala, por eso antes se veían todos chiquitos e iguales).
+     max-height / max-width sólo "recortan" los que exceden el recuadro;
+     los que ya entran (ej. BBVA, escala chica) quedan con su tamaño real. */
+  .gm-tabla__td--pago img {
+    max-height: 30px !important;
+    max-width: 68px !important;
+    object-fit: contain;
   }
 }
